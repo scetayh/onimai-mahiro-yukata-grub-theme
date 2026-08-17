@@ -1,0 +1,58 @@
+desktop-image: "background.png"
+desktop-image-scale-method: "crop"
+
+title-text: " "
+message-font: "Maple Mono NF CN Regular 22"
+terminal-font: "Maple Mono NF CN Regular 18"
+terminal-box: "terminal_box_*.png"
+terminal-left: "1%"
+terminal-top: "18%"
+terminal-width: "64%"
+terminal-height: "80%"
+terminal-border: "0"
+
++ image {
+  top = 5%
+  left = 0
+  width = 700
+  height = 141
+  file = "title.png"
+}
+
++ label {
+  left = 4%
+  top = 18%
+  align = "center"
+  id = "__timeout__"
+  font = "Maple Mono NF CN Regular 22"
+  text = "所选操作系统将在 %d 秒后启动"
+  color = "#777777"
+}
+
++ boot_menu {
+  # location & size
+  left = 0%
+  width = 26%
+  top = 22%
+  height = 72%
+
+  # icons
+  icon_width = 36
+  icon_height = 36
+
+  # all items
+  item_height = 68
+  item_padding = 0
+  item_icon_space = 18
+  item_spacing = 16
+
+  # unselected items
+  item_color = ""
+  item_font = "Maple Mono NF CN Regular 22"
+  item_pixmap_style = "item_*.png"
+
+  # selected items
+  selected_item_color = "#926453"
+  selected_item_font = "Maple Mono NF CN Regular 22"
+  selected_item_pixmap_style = "selected_item_*.png"
+}
