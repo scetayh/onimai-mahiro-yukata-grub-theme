@@ -2,7 +2,9 @@ desktop-image: "background.png"
 desktop-image-scale-method: "crop"
 
 title-text: " "
+
 message-font: "Maple Mono NF CN Regular 22"
+
 terminal-font: "Maple Mono NF CN Regular 18"
 terminal-box: "terminal_box_*.png"
 terminal-left: "1%"
@@ -16,6 +18,7 @@ terminal-border: "0"
   left = 0
   width = 700
   height = 141
+
   file = "title.png"
 }
 
@@ -24,6 +27,7 @@ terminal-border: "0"
   top = 18%
   align = "center"
   id = "__timeout__"
+  
   font = "Maple Mono NF CN Regular 22"
   text = "所选操作系统将在 %d 秒后启动"
   color = "#777777"
