@@ -8,7 +8,7 @@ export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 IFS=$'\n\t'
 
-readonly VERSION=0.1.0
+readonly VERSION=0.1.1
 export VERSION
 readonly ASSETS_DIR=assets
 export ASSETS_DIR
@@ -70,13 +70,15 @@ Options:
          Note: If expected to show larger elements on high-resolution
          displayers, the scale should be set to 1.5 and even bigger.
   -c, --color={ pink | blue }
-         [required] Specify the boot menu item color.
+         Specify the boot menu item color.
+         If not specified, the color will be 'pink'.
          Pink is with female symbols, blue with male ones.
-  -l, --language={ zh-cn | zh-tr | ja | en }
-         [required] Sepcify the timeout prompt language.
+  -l, --language={ en | zh-cn | zh-tr | ja }
+         Sepcify the timeout prompt language.
+         If not specified, the language will be 'en'.
 
 Examples:
-  $0 -c pink -l zh-cn
+  $0 -l zh-cn
   $0 -s 1.5 -c blue -l zh-tr
   $0 --color=pink --language=ja
   $0 --scale 0.75 --color blue --language en
@@ -165,18 +167,12 @@ main() {
             echo_err "color '$option_c_value' not supported"
             return 1
         }
-    else
-        echo_err "You must specify the boot menu item color."
-        return 1
     fi
     if (( has_option_l )); then
-        [[ "$option_l_value" =~ ^(zh-cn|zh-tr|ja|en)$ ]] || {
+        [[ "$option_l_value" =~ ^(en|zh-cn|zh-tr|ja)$ ]] || {
             echo_err "language '$option_l_value' not supported"
             return 1
         }
-    else
-        echo_err "You must specify the timeout prompt language."
-        return 1
     fi
 
     if (( has_option_s )); then
@@ -236,15 +232,14 @@ main() {
                     - $FONT_SIZE_LARGER * 3 / 4"
         )"
     )
+    TIMEOUT_TEXT="Selected OS will be booted in %d seconds"
     [[ $option_l_value = zh-cn ]] && \
         TIMEOUT_TEXT="所选操作系统将在 %d 秒后启动"
     [[ $option_l_value = zh-tr ]] && \
         TIMEOUT_TEXT="所選操作系統將在 %d 秒後啟動"
     [[ $option_l_value = ja ]] && \
         TIMEOUT_TEXT="選択したOSは %d 秒後に起動します"
-    [[ $option_l_value = en ]] && \
-        TIMEOUT_TEXT="Selected OS will be booted in %d seconds"
-
+        
     # terminal
 
     TERMINAL_LEFT=$(float_multiple_round 19 "$scale")
@@ -306,7 +301,9 @@ main() {
     # convert unselected item elements
 
     # set item color
-    item_color=$option_c_value
+    item_color=pink
+    (( has_option_c )) && \
+        item_color=$option_c_value
 
     # west
     ffmpeg -loglevel $FFMPEG_LOGLEVEL \
