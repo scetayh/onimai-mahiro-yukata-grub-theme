@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set -Eeo pipefail
 shopt -s inherit_errexit
 export LANG=C.UTF-8
