@@ -8,7 +8,7 @@
 
 ## 简介
 
-**GRUB Theme Onimai: Mahiro (Yukata)** 是一个模仿 TV 动画[《别当欧尼酱了！》](https://onimai.jp/)（日语：お兄ちゃんはおしまい！）风格并，采用浴衣苹果糖绪山真寻相关元素的 GRUB 主题。
+**GRUB Theme Onimai: Mahiro (Yukata)** 是一个模仿 TV 动画[《别当欧尼酱了！》](https://onimai.jp/)（日语：お兄ちゃんはおしまい！）风格并采用浴衣苹果糖绪山真寻相关元素的 GRUB 主题。
 
 本主题的设计灵感来源于 [itrocaiks](https://github.com/itrocaiks/) 的 [OnimaiGRUB](https://github.com/itrocaiks/OnimaiGRUB) 项目。
 
