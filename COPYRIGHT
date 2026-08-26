@@ -1,0 +1,22 @@
+Files: *
+Copyright: 2026 scetayh (weychon_lyon@outlook.com)
+License: GPL-3.0+
+
+Files: assets/fonts/MapleMono-NF-CN-Regular.ttf
+Copyright: 2022 The Maple Mono Project Authors (https://github.com/subframe7536/maple-font)
+License: OFL-1.1
+
+Files: assets/icons/*
+Copyright: Author Unknown (Retrieved from https://github.com/itrocaiks/OnimaiGRUB in 2026)
+License: UNKNOWN
+
+Files: assets/images/item/*
+ . assets/images/selected_item/*
+ . assets/images/background.png
+ . assets/images/title.png
+Copyright: ねことうふ・一迅社／「おにまい」製作委員会 (https://onimai.jp/)
+License: UNKNOWN
+
+Files: assets/images/terminal_box/*
+Copyright: AdisonCavani (https://github.com/AdisonCavani/distro-grub-themes)
+License: GPL-3.0
