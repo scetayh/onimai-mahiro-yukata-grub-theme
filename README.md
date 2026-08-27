@@ -33,7 +33,7 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 ### Build
 
 > [!TIP]
-> Starting from v0.2.0, users can access [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) to download the pre-built non-scaled themes in different color styles and languages directly. Download and unzip to get the build artifact, and skip to the [Installation](#installation) chapter.
+> Starting from v0.2.0-beta.3, users can access [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) to download the pre-built non-scaled themes in different color styles and languages directly. Download and unzip to get the build artifact, and skip to the [Installation](#installation) chapter.
 
 Clone and enter the repository:
 
