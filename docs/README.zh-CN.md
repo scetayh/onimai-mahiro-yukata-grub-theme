@@ -33,7 +33,7 @@
 ### 构建
 
 > [!TIP]
-> 自 v0.2.0 起，用户可以在 [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) 中直接下载已构建好的不同颜色样式和不同语言的无缩放主题。下载后解压即可得到构建产物，并跳到[安装](#安装)章节。
+> 自 v0.2.0-beta.3 和 v0.2.0 起，用户可以分别前往 [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) 或 [OpenDesktop](https://www.opendesktop.org/p/2369660/) 直接下载已构建好的不同颜色样式和不同语言的无缩放主题。下载后解压即可得到构建产物，并跳到[安装](#安装)章节。
 
 克隆并进入本仓库：
 
