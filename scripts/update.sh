@@ -8,6 +8,8 @@ set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-./build.sh
+rm -rf themes/
+./build.sh -l zh-CN -s 0.9
+sudo rm -rf /boot/grub/themes/onimai_mahiro_yukata/
 sudo cp -r themes/onimai_mahiro_yukata/ /boot/grub/themes/
 sudo grub-mkconfig -o /boot/grub/grub.cfg
