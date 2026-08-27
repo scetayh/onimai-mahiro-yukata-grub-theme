@@ -10,4 +10,4 @@ IFS=$'\n\t'
 
 rm -rf themes/
 ./build.sh
-peekaboot themes/onimai_mahiro_yukata
+peekaboot -r 1920x1200 themes/onimai_mahiro_yukata
