@@ -28,7 +28,6 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 - `bc`
 - `grub-mkfont` (GRUB)
 - `ffmpeg`
-- `magick` (ImageMagick)
 - `identify` (ImageMagick)
 
 ### Build

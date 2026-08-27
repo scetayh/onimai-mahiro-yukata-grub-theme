@@ -28,7 +28,6 @@
 - `bc`
 - `grub-mkfont` (GRUB)
 - `ffmpeg`
-- `magick` (ImageMagick)
 - `identify` (ImageMagick)
 
 ### 构建
