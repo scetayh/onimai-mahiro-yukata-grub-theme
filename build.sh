@@ -6,7 +6,7 @@ set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-readonly VERSION=0.2.0-beta.3
+readonly VERSION=0.2.0
 export VERSION
 readonly ASSETS_DIR=assets
 export ASSETS_DIR
