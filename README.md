@@ -1,14 +1,14 @@
-# Onimai: Mahiro (Yukata) GRUB Theme v0.1.2
+# Onimai Mahiro (Yukata) GRUB Theme
 
 <p align="center">
   <b>English</b> | <a href="docs/README.zh-CN.md">简体中文</a>
 </p>
 
-![Preview](https://blog.tarikkochan.top/grub_theme_onimai_mahiro_yukata_preview.jpg)
+![Preview](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.jpg)
 
 ## Introduction
 
-**GRUB Theme Onimai: Mahiro (Yukata)** is a GRUB theme inspired by the TV anime [*Onimai: I'm Now Your Sister!*](https://onimai.jp/) (Japanese: お兄ちゃんはおしまい！), featuring Mahiro Oyama in a yukata with a candy apple.
+**Onimai Mahiro (Yukata) GRUB Theme** is a GRUB theme inspired by the TV anime [*Onimai: I'm Now Your Sister!*](https://onimai.jp/) (Japanese: お兄ちゃんはおしまい！), featuring Mahiro Oyama in a yukata with a candy apple.
 
 This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGRUB](https://github.com/itrocaiks/OnimaiGRUB) project.
 
@@ -33,11 +33,14 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 
 ### Build
 
+> [!TIP]
+> Starting from v0.2.0, users can access [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) to download the pre-built non-scaled themes in different color styles and languages directly. Download and unzip to get the build artifact, and skip to the [Installation](#installation) chapter.
+
 Clone and enter the repository:
 
 ```bash
-git clone https://github.com/scetayh/grub-theme-onimai-mahiro-yukata.git
-cd grub-theme-onimai-mahiro-yukata/
+git clone https://github.com/scetayh/onimai-mahiro-yukata-grub-theme.git
+cd onimai-mahiro-yukata-grub-theme/
 ```
 
 Run the `build.sh` script to start the build.
@@ -50,11 +53,11 @@ By default, running the script directly builds a theme with **pink** menu items 
 
 By passing different arguments to the script, you can build themes with different color schemes, different language timeout prompts, and custom scaling ratios. Run `./build.sh --help` to view the script usage.
 
-The build output is located at `themes/onimai_mahiro_yukata`.
+The build artifact is located at `themes/onimai_mahiro_yukata<suffix>`.
 
 ### Installation
 
-Copy the build output to your local GRUB themes directory, which is typically `/boot/grub/themes/`:
+If the suffix is not specified using the `-S` or `--suffix` options in the script, the build artifact should be located at `themes/animai_mahiro_yukata`. Copy it to your local GRUB themes directory, which is typically `/boot/grub/themes/`:
 
 ```bash
 sudo cp -r themes/onimai_mahiro_yukata/ /boot/grub/themes/

@@ -1,14 +1,14 @@
-# 别酱了浴衣真寻 GRUB 主题 版本 0.1.2
+# 别酱了浴衣真寻 GRUB 主题
 
 <p align="center">
   <a href="../README.md">English</a> | <b>简体中文</b>
 </p>
 
-![预览](https://blog.tarikkochan.top/grub_theme_onimai_mahiro_yukata_preview.jpg)
+![预览](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.jpg)
 
 ## 简介
 
-**GRUB Theme Onimai: Mahiro (Yukata)** 是一个模仿 TV 动画[《别当欧尼酱了！》](https://onimai.jp/)（日语：お兄ちゃんはおしまい！）风格并采用浴衣苹果糖绪山真寻相关元素的 GRUB 主题。
+**Onimai Mahiro (Yukata) GRUB Theme** 是一个模仿 TV 动画[《别当欧尼酱了！》](https://onimai.jp/)（日语：お兄ちゃんはおしまい！）风格并采用浴衣苹果糖绪山真寻相关元素的 GRUB 主题。
 
 本主题的设计灵感来源于 [itrocaiks](https://github.com/itrocaiks/) 的 [OnimaiGRUB](https://github.com/itrocaiks/OnimaiGRUB) 项目。
 
@@ -33,11 +33,14 @@
 
 ### 构建
 
+> [!TIP]
+> 自 v0.2.0 起，用户可以在 [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) 中直接下载已构建好的不同颜色样式和不同语言的无缩放主题。下载后解压即可得到构建产物，并跳到[安装](#安装)章节。
+
 克隆并进入本仓库：
 
 ```bash
-git clone https://github.com/scetayh/grub-theme-onimai-mahiro-yukata.git
-cd grub-theme-onimai-mahiro-yukata/
+git clone https://github.com/scetayh/onimai-mahiro-yukata-grub-theme.git
+cd onimai-mahiro-yukata-grub-theme/
 ```
 
 运行 `build.sh` 脚本以启动构建。
@@ -50,11 +53,11 @@ cd grub-theme-onimai-mahiro-yukata/
 
 向脚本传递不同参数，可以构建不同颜色样式、不同语言超时提示、自定义缩放比例的主题。执行 `./build.sh --help` 以查看脚本用法。
 
-构建产物位于 `themes/onimai_mahiro_yukata`。
+构建产物位于 `themes/onimai_mahiro_yukata<suffix>`。
 
 ### 安装
 
-将构建产物复制到本地的 GRUB 主题目录下，这通常是 `/boot/grub/themes/`：
+如果没有在脚本中使用 `-S` 或 `--suffix` 选项指定后缀，那么构建产物应该位于 `themes/onimai_mahiro_yukata` 。将其复制到本地的 GRUB 主题目录下，这通常是 `/boot/grub/themes/`：
 
 ```bash
 sudo cp -r themes/onimai_mahiro_yukata/ /boot/grub/themes/
