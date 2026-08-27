@@ -1,0 +1,61 @@
+name: Build and Release on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        color: [pink, blue]
+        language: [en, zh-CN, zh-TW, es, fr, de, ja, ko, ru, ar, pt, hi, it]
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            bc \
+            grub-common \
+            ffmpeg \
+            imagemagick \
+            util-linux
+
+      - name: Set clean version
+        run: |
+          CLEAN_VERSION="${GITHUB_REF_NAME#v}"
+          echo "CLEAN_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+
+      - name: Build
+        run: bash ./build.sh --color ${{ matrix.color }} --language ${{ matrix.language }}
+
+      - name: Package
+        run: tar -czf onimai-mahiro-yukata-grub-theme-${{ matrix.color }}-${{ matrix.language }}-${{ env.CLEAN_VERSION }}.tar.gz themes/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: onimai-mahiro-yukata-grub-theme-${{ matrix.color }}-${{ matrix.language }}-${{ env.CLEAN_VERSION }}
+          path: onimai-mahiro-yukata-grub-theme-*.tar.gz
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*.tar.gz
+          name: Release ${{ github.ref_name }}
