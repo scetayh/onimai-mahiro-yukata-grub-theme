@@ -1,4 +1,4 @@
-# Onimai: Mahiro (Yukata) GRUB Theme v0.1.1
+# Onimai: Mahiro (Yukata) GRUB Theme v0.1.2
 
 <p align="center">
   <b>English</b> | <a href="docs/README.zh-CN.md">简体中文</a>

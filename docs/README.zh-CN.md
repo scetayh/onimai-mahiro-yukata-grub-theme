@@ -1,4 +1,4 @@
-# 别酱了浴衣真寻 GRUB 主题 版本 0.1.1
+# 别酱了浴衣真寻 GRUB 主题 版本 0.1.2
 
 <p align="center">
   <a href="../README.md">English</a> | <b>简体中文</b>
