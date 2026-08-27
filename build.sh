@@ -6,7 +6,7 @@ set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-readonly VERSION=0.2.0-beta.1
+readonly VERSION=0.2.0-beta.2
 export VERSION
 readonly ASSETS_DIR=assets
 export ASSETS_DIR
@@ -403,7 +403,7 @@ elif [[ "$(pwd -P)" != "$(cd "$(dirname "$0")" && pwd -P)" ]]; then
     echo_err "You should run this script in the project root directory."
     exit 1
 else
-    for cmd in bc grub-mkfont ffmpeg magick identify; do
+    for cmd in bc grub-mkfont ffmpeg identify; do
         command -v $cmd >& /dev/null || {
             echo_err "command '$cmd' not found"
             exit 1
