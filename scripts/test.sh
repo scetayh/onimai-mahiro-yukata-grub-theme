@@ -9,5 +9,5 @@ shopt -s inherit_errexit
 IFS=$'\n\t'
 
 rm -rf themes/
-./build.sh
+./build.sh -s 0.75
 peekaboot -r 1920x1200 themes/onimai_mahiro_yukata
