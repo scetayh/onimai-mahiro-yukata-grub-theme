@@ -6,7 +6,7 @@ set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-readonly VERSION=0.2.0
+readonly VERSION=0.3.0
 export VERSION
 readonly ASSETS_DIR=assets
 export ASSETS_DIR
@@ -145,6 +145,7 @@ main() {
         echo $VERSION
         return 0
     }
+    
     [[ -v flags[h] ]] && {
         usage
         return 0
@@ -229,8 +230,7 @@ main() {
     ITEM_HEIGHT=$(float_multiple_round 68 "$scale")
     ITEM_ICON_SPACE=$(float_multiple_round 18 "$scale")
     ITEM_SPACING=$(float_multiple_round 16 "$scale")
-    [[ ${opts[c]} = pink ]] && \
-        ITEM_COLOR_HEX=#ee858c
+    ITEM_COLOR_HEX=#ee858c
     [[ ${opts[c]} = blue ]] && \
         ITEM_COLOR_HEX=#45bbff
 
