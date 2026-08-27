@@ -8,5 +8,6 @@ set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
+rm -rf themes/
 ./build.sh
 peekaboot themes/onimai_mahiro_yukata
