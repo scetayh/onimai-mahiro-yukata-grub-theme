@@ -6,13 +6,13 @@ set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-readonly VERSION=0.2.0-beta.2
+readonly VERSION=0.2.0-beta.3
 export VERSION
 readonly ASSETS_DIR=assets
 export ASSETS_DIR
 readonly FONT_FILENAME="MapleMono-NF-CN-Regular.ttf"
 export FONT_FILENAME
-readonly FFMPEG_LOGLEVEL="repeat+level+time+datetime+trace"
+readonly FFMPEG_LOGLEVEL="trace"
 export FFMPEG_LOGLEVEL
 
 echo_err() {
