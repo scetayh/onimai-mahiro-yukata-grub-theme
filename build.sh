@@ -4,11 +4,9 @@
 
 set -Eeo pipefail
 shopt -s inherit_errexit
-# export LANG=C.UTF-8
-# export LC_ALL=C.UTF-8
 IFS=$'\n\t'
 
-readonly VERSION=0.1.2
+readonly VERSION=0.2.0-beta.1
 export VERSION
 readonly ASSETS_DIR=assets
 export ASSETS_DIR
@@ -55,7 +53,7 @@ float_multiple_round() {
 usage() {
     cat >&2 << EOF
 Usage: $0 [ option ]
-GRUB Theme Onimai: Mahiro (Yukata) build script
+Onimai Mahiro (Yukata) GRUB Theme build script
 
 Options:
   -V, --version
