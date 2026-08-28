@@ -6,6 +6,10 @@
 
 ![预览](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.jpg)
 
+<p align="center">
+  <small><i>前往<a href="#画廊">画廊</a>查看更多预览。</i></small>
+</p>
+
 ## 简介
 
 **Onimai Mahiro (Yukata) GRUB Theme** 是一个模仿 TV 动画[《别当欧尼酱了！》](https://onimai.jp/)（日语：お兄ちゃんはおしまい！）风格并采用浴衣苹果糖绪山真寻相关元素的 GRUB 主题。
@@ -83,6 +87,12 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 重启查看主题效果。
+
+## 画廊
+
+![一台安装了 Gentoo Asahi 的 13.9 英寸 Macbook Air（M2 机型）的 GRUB 主题画面](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_galary_1.jpg)
+
+![GRUB 命令行界面](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_galary_2.jpg)
 
 ## 版权
 

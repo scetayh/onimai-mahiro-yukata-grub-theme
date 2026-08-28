@@ -6,6 +6,10 @@
 
 ![Preview](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.jpg)
 
+<p align="center">
+  <small><i>Go to <a href="#galary">Galary</a> for more previews.</i></small>
+</p>
+
 ## Introduction
 
 **Onimai Mahiro (Yukata) GRUB Theme** is a GRUB theme that imitates the style of the TV anime [*Onimai: I'm Now Your Sister!*](https://onimai.jp/) (Japanese: お兄ちゃんはおしまい！) and features Mahiro Oyama in a yukata with a candy apple.
@@ -84,6 +88,12 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 Reboot to see the theme in action.
+
+## Galary
+
+![GRUB theme screen with Gentoo Asahi installed on a 13.9-inch Macbook Air (M2 model)](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_galary_1.jpg)
+
+![GRUB CLI](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_galary_2.jpg)
 
 ## Copyright
 
