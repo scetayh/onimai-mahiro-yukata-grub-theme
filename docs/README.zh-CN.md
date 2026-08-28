@@ -17,10 +17,14 @@
 - 采用脚本控制构建过程
 - 依赖于 ImageMagick 和 FFmpeg 等
 - 启动菜单项样式支持**粉色**和**蓝色**两种颜色及对应性别符号
+- 统一风格的 GRUB 命令行界面（自 v0.3.0-beta.1 起）
 - 超时提示支持几种常见语言
 - 支持自定义缩放比例
 
 ## 开始使用
+
+> [!TIP]
+> 自 v0.2.0-beta.3 和 v0.2.0 起，用户可以分别前往 [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) 或 [OpenDesktop](https://www.opendesktop.org/p/2369660/) 直接下载已构建好的不同颜色样式和不同语言的无缩放主题。下载后解压即可得到构建产物，并跳到[安装](#安装)章节。
 
 ### 依赖
 
@@ -29,11 +33,9 @@
 - `grub-mkfont` (GRUB)
 - `ffmpeg`
 - `identify` (ImageMagick)
+- `convert` (ImageMagick)
 
 ### 构建
-
-> [!TIP]
-> 自 v0.2.0-beta.3 和 v0.2.0 起，用户可以分别前往 [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) 或 [OpenDesktop](https://www.opendesktop.org/p/2369660/) 直接下载已构建好的不同颜色样式和不同语言的无缩放主题。下载后解压即可得到构建产物，并跳到[安装](#安装)章节。
 
 克隆并进入本仓库：
 
@@ -52,14 +54,20 @@ cd onimai-mahiro-yukata-grub-theme/
 
 向脚本传递不同参数，可以构建不同颜色样式、不同语言超时提示、自定义缩放比例的主题。执行 `./build.sh --help` 以查看脚本用法。
 
-构建产物位于 `themes/onimai_mahiro_yukata<suffix>`。
+构建产物位于 `build/`，其中包含**主题部分** `build/themes/onimai_mahiro_yukata<suffix>` 以及**自定义配置脚本部分** `build/98_mahiro`。
 
 ### 安装
 
-如果没有在脚本中使用 `-S` 或 `--suffix` 选项指定后缀，那么构建产物应该位于 `themes/onimai_mahiro_yukata` 。将其复制到本地的 GRUB 主题目录下，这通常是 `/boot/grub/themes/`：
+如果没有在脚本中使用 `-S` 或 `--suffix` 选项指定后缀，那么构建产物的主题部分应该位于 `build/themes/onimai_mahiro_yukata` 。将其复制到本地的 GRUB 主题目录下，这通常是 `/boot/grub/themes/`：
 
 ```bash
-sudo cp -r themes/onimai_mahiro_yukata/ /boot/grub/themes/
+sudo cp -r build/themes/onimai_mahiro_yukata/ /boot/grub/themes/
+```
+
+将构建产物中的自定义配置脚本复制到本地的对应目录 `/etc/grub.d/` 下：
+
+```bash
+sudo cp build/98_mahiro /etc/grub.d/
 ```
 
 编辑 `/etc/default/grub` 以设置 `GRUB_THEME` 变量为复制得到的 `theme.txt` 路径（如 `"/boot/grub/themes/onimai_mahiro_yukata/theme.txt"`），或者直接追加一行：

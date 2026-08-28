@@ -18,9 +18,13 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 - Depends on ImageMagick, FFmpeg, etc.
 - Boot menu item styling supports **pink** and **blue** color schemes with corresponding gender symbols
 - Timeout prompt supports several common languages
+- Unified-style GRUB command-line interface (since v0.3.0-beta.1)
 - Customizable scaling ratio
 
 ## Getting Started
+
+> [!TIP]
+> Starting from v0.2.0-beta.3 and v0.2.0 respectively, users can access [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) or [OpenDesktop](https://www.opendesktop.org/p/2369660/) to download the pre-built non-scaled themes in different color styles and languages directly. Download and unzip to get the build artifact, and skip to the [Installation](#installation) chapter.
 
 ### Dependencies
 
@@ -29,11 +33,9 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 - `grub-mkfont` (GRUB)
 - `ffmpeg`
 - `identify` (ImageMagick)
+- `convert` (ImageMagick)
 
 ### Build
-
-> [!TIP]
-> Starting from v0.2.0-beta.3 and v0.2.0 respectively, users can access [Releases](https://github.com/scetayh/onimai-mahiro-yukata-grub-theme/releases/) or [OpenDesktop](https://www.opendesktop.org/p/2369660/) to download the pre-built non-scaled themes in different color styles and languages directly. Download and unzip to get the build artifact, and skip to the [Installation](#installation) chapter.
 
 Clone and enter the repository:
 
@@ -52,14 +54,21 @@ By default, running the script directly builds a theme with **pink** menu items 
 
 By passing different arguments to the script, you can build themes with different color schemes, different language timeout prompts, and custom scaling ratios. Run `./build.sh --help` to view the script usage.
 
-The build artifact is located at `themes/onimai_mahiro_yukata<suffix>`.
+The build artifact is located at `build/themes/onimai_mahiro_yukata<suffix>`, which includes the **theme section** `build/themes/onimai_mahiro_yukata<suffix>` and the **custom configuration script section** `build/98_mahiro`.
+
 
 ### Installation
 
-If the suffix is not specified using the `-S` or `--suffix` options in the script, the build artifact should be located at `themes/animai_mahiro_yukata`. Copy it to your local GRUB themes directory, which is typically `/boot/grub/themes/`:
+If the suffix is not specified using the `-S` or `--suffix` options in the script, the build artifact should be located at `build/themes/animai_mahiro_yukata`. Copy it to your local GRUB themes directory, which is typically `/boot/grub/themes/`:
 
 ```bash
-sudo cp -r themes/onimai_mahiro_yukata/ /boot/grub/themes/
+sudo cp -r build/themes/onimai_mahiro_yukata/ /boot/grub/themes/
+```
+
+Copy the custom configuration script from the build product to the corresponding local directory `/etc/grub.d/`:
+
+```bash
+sudo cp build/98_mahiro /etc/grub.d/
 ```
 
 Edit `/etc/default/grub` to set the `GRUB_THEME` variable to the path of the copied `theme.txt` (e.g., `"/boot/grub/themes/onimai_mahiro_yukata/theme.txt"`), or simply append a line:
