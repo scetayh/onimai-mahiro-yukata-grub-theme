@@ -532,9 +532,9 @@ main() {
     export COLOR_NORMAL
 
     echo
-    envsubst < $ASSETS_DIR/98_mahiro.template | tee "$BUILD_DIR/98_mahiro"
+    envsubst < $ASSETS_DIR/99_mahiro.template | tee "$BUILD_DIR/99_mahiro"
     echo
-    chmod -v +x "$BUILD_DIR/98_mahiro"
+    chmod -v +x "$BUILD_DIR/99_mahiro"
 }
 
 #-------------------------------------------------------------------------------

@@ -54,7 +54,7 @@ cd onimai-mahiro-yukata-grub-theme/
 
 向脚本传递不同参数，可以构建不同颜色样式、不同语言超时提示、自定义缩放比例的主题。执行 `./build.sh --help` 以查看脚本用法。
 
-构建产物位于 `build/`，其中包含**主题部分** `build/themes/onimai_mahiro_yukata<suffix>` 以及**自定义配置脚本部分** `build/98_mahiro`。
+构建产物位于 `build/`，其中包含**主题部分** `build/themes/onimai_mahiro_yukata<suffix>` 以及**自定义配置脚本部分** `build/99_mahiro`。
 
 ### 安装
 
@@ -67,7 +67,7 @@ sudo cp -r build/themes/onimai_mahiro_yukata/ /boot/grub/themes/
 将构建产物中的自定义配置脚本复制到本地的对应目录 `/etc/grub.d/` 下：
 
 ```bash
-sudo cp build/98_mahiro /etc/grub.d/
+sudo cp build/99_mahiro /etc/grub.d/
 ```
 
 编辑 `/etc/default/grub` 以设置 `GRUB_THEME` 变量为复制得到的 `theme.txt` 路径（如 `"/boot/grub/themes/onimai_mahiro_yukata/theme.txt"`），或者直接追加一行：

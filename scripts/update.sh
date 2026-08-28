@@ -8,5 +8,5 @@ rm -rfv build/*
 ./build.sh -l zh-CN -s 0.95
 sudo rm -rfv /boot/grub/themes/onimai_mahiro_yukata/
 sudo cp -rv build/themes/onimai_mahiro_yukata/ /boot/grub/themes/
-sudo cp -v build/98_mahiro /etc/grub.d/
+sudo cp -v build/99_mahiro /etc/grub.d/
 sudo grub-mkconfig -o /boot/grub/grub.cfg

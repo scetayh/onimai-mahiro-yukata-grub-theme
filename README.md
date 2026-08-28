@@ -54,7 +54,7 @@ By default, running the script directly builds a theme with **pink** menu items 
 
 By passing different arguments to the script, you can build themes with different color schemes, different language timeout prompts, and custom scaling ratios. Run `./build.sh --help` to view the script usage.
 
-The build artifact is located at `build/`, which includes the **theme section** `build/themes/onimai_mahiro_yukata<suffix>` and the **custom configuration script section** `build/98_mahiro`.
+The build artifact is located at `build/`, which includes the **theme section** `build/themes/onimai_mahiro_yukata<suffix>` and the **custom configuration script section** `build/99_mahiro`.
 
 
 ### Installation
@@ -68,7 +68,7 @@ sudo cp -r build/themes/onimai_mahiro_yukata/ /boot/grub/themes/
 Copy the custom configuration script from the build product to the corresponding local directory `/etc/grub.d/`:
 
 ```bash
-sudo cp build/98_mahiro /etc/grub.d/
+sudo cp build/99_mahiro /etc/grub.d/
 ```
 
 Edit `/etc/default/grub` to set the `GRUB_THEME` variable to the path of the copied `theme.txt` (e.g., `"/boot/grub/themes/onimai_mahiro_yukata/theme.txt"`), or simply append a line:
