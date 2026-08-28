@@ -54,7 +54,7 @@ By default, running the script directly builds a theme with **pink** menu items 
 
 By passing different arguments to the script, you can build themes with different color schemes, different language timeout prompts, and custom scaling ratios. Run `./build.sh --help` to view the script usage.
 
-The build artifact is located at `build/themes/onimai_mahiro_yukata<suffix>`, which includes the **theme section** `build/themes/onimai_mahiro_yukata<suffix>` and the **custom configuration script section** `build/98_mahiro`.
+The build artifact is located at `build/`, which includes the **theme section** `build/themes/onimai_mahiro_yukata<suffix>` and the **custom configuration script section** `build/98_mahiro`.
 
 
 ### Installation
