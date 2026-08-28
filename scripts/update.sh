@@ -6,7 +6,11 @@ IFS=$'\n\t'
 
 rm -rfv build/*
 ./build.sh -l zh-CN -s 0.95
+
 sudo rm -rfv /boot/grub/themes/onimai_mahiro_yukata/
 sudo cp -rv build/themes/onimai_mahiro_yukata/ /boot/grub/themes/
+
+sudo rm -rfv /etc/grub.d/*_mahiro
 sudo cp -v build/99_mahiro /etc/grub.d/
+
 sudo grub-mkconfig -o /boot/grub/grub.cfg

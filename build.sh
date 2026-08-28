@@ -7,7 +7,7 @@ IFS=$'\n\t'
 #-------------------------------------------------------------------------------
 # Macros
 #-------------------------------------------------------------------------------
-readonly VERSION=0.3.0
+readonly VERSION=0.3.1
 readonly THEME_NAME_BASE=onimai_mahiro_yukata
 readonly ASSETS_DIR=assets
 readonly BUILD_DIR=build

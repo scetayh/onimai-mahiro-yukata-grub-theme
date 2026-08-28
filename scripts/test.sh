@@ -6,4 +6,5 @@ IFS=$'\n\t'
 
 rm -rf build/*
 ./build.sh -s 0.75
+
 peekaboot -r 1920x1200 -c "#FFF9F2" -C dark-gray/black build/themes/onimai_mahiro_yukata
