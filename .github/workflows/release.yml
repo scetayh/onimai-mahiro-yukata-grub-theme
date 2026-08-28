@@ -38,7 +38,7 @@ jobs:
         run: bash ./build.sh --color ${{ matrix.color }} --language ${{ matrix.language }}
 
       - name: Package
-        run: tar -c --use-compress-program="gzip -9" --transform 's/^build\///' -f onimai-mahiro-yukata-grub-theme-${{ matrix.color }}-${{ matrix.language }}-${{ env.CLEAN_VERSION }}.tar.gz build/
+        run: tar -c --use-compress-program="gzip -9" -f onimai-mahiro-yukata-grub-theme-${{ matrix.color }}-${{ matrix.language }}-${{ env.CLEAN_VERSION }}.tar.gz build/
 
       - uses: actions/upload-artifact@v4
         with:
