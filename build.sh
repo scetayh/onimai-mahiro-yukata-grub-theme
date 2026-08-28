@@ -1,27 +1,33 @@
 #!/usr/bin/env bash
-
 # SPDX-License-Identifier: GPL-3.0-or-later
-
 set -Eeo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-readonly VERSION=0.3.0
-export VERSION
+#-------------------------------------------------------------------------------
+# Macros
+#-------------------------------------------------------------------------------
+readonly VERSION=0.3.0-beta.1
+readonly THEME_NAME_BASE=onimai_mahiro_yukata
 readonly ASSETS_DIR=assets
-export ASSETS_DIR
-readonly FONT_FILENAME="MapleMono-NF-CN-Regular.ttf"
-export FONT_FILENAME
-readonly FFMPEG_LOGLEVEL="trace"
-export FFMPEG_LOGLEVEL
+readonly BUILD_DIR=build
+readonly FONT_FILE="MapleMono-NF-CN-Regular.ttf"
+readonly FONT_NAME="Maple Mono NF CN"
+readonly FONT_STYLE="Regular"
 
+#-------------------------------------------------------------------------------
+# Utility Functions
+#-------------------------------------------------------------------------------
 echo_err() {
     echo "Error: $*" >&2
 }
 
 is_positive() {
     local str
-    str="$(printf '%s' "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    str="$(
+        printf '%s' "$1" | \
+            sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+    )"
     [ -z "$str" ] && \
         return 1
 
@@ -50,35 +56,38 @@ float_multiple_round() {
     round "$(float_multiple "$@")"
 }
 
+#-------------------------------------------------------------------------------
+# Business Functions
+#-------------------------------------------------------------------------------
 usage() {
     cat >&2 << EOF
 Usage: $0 [ option ]
 Onimai Mahiro (Yukata) GRUB Theme build script
 
 Options:
-  -V, --version
-         Output version information and exit.
-  -h, --help
-         Display this help and exit.
-  -S, --suffix=<suffix>
-         Append a suffix to the release.
-         Note: You may need to add an underscore (_) at the beginning of the
-         suffix.
-         Warning: To ensure maximum compatibility, it is suggested that the
-         suffix contains lowercase letters, numbers, and underscores only.
-  -s, --scale=<scale>
-         Specify the zoom scale of elements except the background.
-         Character illustrations included in the background.
-         Note: If expected to show larger and fewer elements on high-resolution
-         displayers, the scale should be set to 1.5 and even bigger.
-  -c, --color={ pink | blue }
-         Specify the boot menu item color.
-         If not specified, the color will be 'pink'.
-         Pink is with female symbols, blue with male ones.
-  -l, --language=<language>
-         Sepcify the timeout prompt language.
-         Available languages: 'en' (default), 'zh-CN', 'zh-TW', 'es', 'fr',
-         'de', 'ja', 'ko', 'ru', 'ar', 'pt', 'hi', 'it'.
+  [Script information]
+    -h, --help
+        Display this help and exit.
+    -V, --version
+        Output version information and exit.
+  [Build]
+    -S, --suffix=<suffix>
+        Append a suffix to the theme name.
+        Note: You may need to add an underscore (_) at the beginning of the
+          suffix.
+        Warning: To ensure maximum compatibility, it is suggested that the
+          suffix contains lowercase letters, numbers, and underscores only.
+    -s, --scale=<scale>
+        Specify the zoom scale of elements except the background.
+        Note: If expected to show larger and fewer elements on high-resolution
+          displayers, the scale should be set to 1.5 and even bigger.
+    -c, --color={ pink | blue }
+        Specify the boot menu item color style. [default: pink]
+        Pink is with female symbols, blue with male ones.
+    -l, --language=<language>
+        Sepcify the timeout prompt language. [default: en]
+        Available languages: 'en', 'zh-CN', 'zh-TW', 'es', 'fr', 'de', 'ja',
+          'ko', 'ru', 'ar', 'pt', 'hi', 'it'.
 
 Examples:
   $0 -l zh-CN
@@ -88,11 +97,77 @@ Examples:
 EOF
 }
 
-main() {
-    # ===== Argument Parsing =====
+gen_terminal_box() {
+    local border_outer_thickness=10
+    local border_inner_thickness=4
 
-    opt_short=Vhs:S:c:l:
-    opt_long=version,help,scale:,suffix:,color:,language:
+    local border_outer_color="#FFB8C6"
+    local border_inner_color="#FFE796"
+
+    local output_prefix="${theme_output_dir:=.}/terminal_box"
+
+    local fillet_radius=$((border_outer_thickness + border_inner_thickness + 2))
+    local full_image_sidelen=$((fillet_radius * 2 + 1))
+
+    local border_outer_x1=0
+    local border_outer_y1=0
+    local border_outer_x2=$((full_image_sidelen - 1))
+    local border_outer_y2=$((full_image_sidelen - 1))
+    local border_outer_radius=$fillet_radius
+
+    local border_inner_x1=$border_outer_thickness
+    local border_inner_y1=$border_outer_thickness
+    local border_inner_x2=$((full_image_sidelen - 1 - border_outer_thickness))
+    local border_inner_y2=$((full_image_sidelen - 1 - border_outer_thickness))
+    local border_inner_radius=$((fillet_radius - border_outer_thickness))
+
+    local content_x1=$((border_outer_thickness + border_inner_thickness))
+    local content_y1=$((border_outer_thickness + border_inner_thickness))
+    local content_x2=$((
+        full_image_sidelen - 1 - border_outer_thickness - border_inner_thickness
+    ))
+    local content_y2=$((
+        full_image_sidelen - 1 - border_outer_thickness - border_inner_thickness
+    ))
+    local content_radius=$((
+        fillet_radius - border_outer_thickness - border_inner_thickness
+    ))
+
+    local tmp
+    tmp=$(mktemp -d "/tmp/XXXXXXXXXX")
+
+    local full_image="$tmp/full_image.png"
+
+    convert -size ${full_image_sidelen}x${full_image_sidelen} xc:none \
+        -fill "$border_outer_color" \
+            -draw "roundrectangle $border_outer_x1,$border_outer_y1 $border_outer_x2,$border_outer_y2 $border_outer_radius,$border_outer_radius" \
+        -fill "$border_inner_color" \
+            -draw "roundrectangle $border_inner_x1,$border_inner_y1 $border_inner_x2,$border_inner_y2 $border_inner_radius,$border_inner_radius" \
+        -fill "$BACKGROUND_COLOR" \
+            -draw "roundrectangle $content_x1,$content_y1 $content_x2,$content_y2 $content_radius,$content_radius" \
+        -alpha on -colorspace sRGB \
+        "$full_image"
+
+    local default_opts=(+repage -alpha on -define png:format=png32)
+    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+0+0 "${default_opts[@]}" "${output_prefix}_nw.png"
+    convert "$full_image" -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+0 "${default_opts[@]}" "${output_prefix}_n.png"
+    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+0 "${default_opts[@]}" "${output_prefix}_ne.png"
+    convert "$full_image" -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+0+${fillet_radius} "${default_opts[@]}" "${output_prefix}_w.png"
+    convert "$full_image" -crop $((full_image_sidelen - 2*fillet_radius))x$((full_image_sidelen - 2*fillet_radius))+${fillet_radius}+${fillet_radius} "${default_opts[@]}" "${output_prefix}_c.png"
+    convert "$full_image" -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+$((full_image_sidelen - fillet_radius))+${fillet_radius} "${default_opts[@]}" "${output_prefix}_e.png"
+    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+0+$((full_image_sidelen - fillet_radius)) "${default_opts[@]}" "${output_prefix}_sw.png"
+    convert "$full_image" -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+$((full_image_sidelen - fillet_radius)) "${default_opts[@]}" "${output_prefix}_s.png"
+    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+$((full_image_sidelen - fillet_radius)) "${default_opts[@]}" "${output_prefix}_se.png"
+}
+
+#-------------------------------------------------------------------------------
+# Main Functions
+#-------------------------------------------------------------------------------
+main() {
+    # >>> Stage A: Parse arguments
+
+    opt_short=hVs:S:c:l:
+    opt_long=help,version,scale:,suffix:,color:,language:
 
     opt="$(getopt -o "$opt_short" -l "$opt_long" -n "$0" -- "$@")"
     eval set -- "$opt"
@@ -102,12 +177,12 @@ main() {
     
     while true; do
         case "$1" in
-            -V|--version)
-                flags[V]=
-                shift 1
-                ;;
             -h|--help)
                 flags[h]=
+                shift 1
+                ;;
+            -V|--version)
+                flags[V]=
                 shift 1
                 ;;
             -s|--scale)
@@ -137,28 +212,28 @@ main() {
         esac
     done
 
-    # ===== Argument Check =====
+    # >>> Stage B: Check arguments
 
-    # script information
+    #   1. Script information
 
-    [[ -v flags[V] ]] && {
-        echo $VERSION
-        return 0
-    }
-    
     [[ -v flags[h] ]] && {
         usage
         return 0
     }
 
-    # operands
+    [[ -v flags[V] ]] && {
+        echo "$VERSION"
+        return 0
+    }
+    
+    #   2. Operands
 
     [[ $# -eq 0 ]] || {
         echo_err "too many arguments"
         return 1
     }
 
-    # options
+    #   3. Options
 
     [[ -v opts[s] ]] && {
         is_positive "${opts[s]}" || {
@@ -181,69 +256,78 @@ main() {
         }
     }
 
-    # ===== Variable Calculation =====
+    # >>> Stage C: Declare variables
 
-    # non-export
+    #   1. For theme output
 
-    build_dir="themes/onimai_mahiro_yukata${opts[S]}"
+    theme_name="${THEME_NAME_BASE}${opts[S]}"
+    theme_output_dir="$BUILD_DIR/themes/$theme_name"
 
-    scale=1
-    [[ -v opts[s] ]] && \
-        scale=${opts[s]}
+    #   2. Local
 
-    item_color=pink
-    [[ -v opts[c] ]] && \
-        item_color=${opts[c]}
+    scale=${opts[s]:=1}
+
+    font="$FONT_NAME $FONT_STYLE"
+    font_size_larger=$(float_multiple_round 22 "$scale")
+    font_size_smaller=$(float_multiple_round 19 "$scale")
+    font_larger="$font $font_size_larger"
+    font_smaller="$font $font_size_smaller"
+
+    brand_h2w_ratio="$(identify -format '%h/%w' $ASSETS_DIR/images/brand.png)"
+
+    icon_size=$(float_multiple_round 36 "$scale")
+
+    item_color_style=${opts[c]:=pink}
 
     item_w_width=$(float_multiple_round 24 "$scale")
 
-    # fonts
+    #   3. For theme config
 
-    FONT_NAME="Maple Mono NF CN"
-    FONT_STYLE="Regular"
-    FONT_SIZE_LARGER=$(float_multiple_round 22 "$scale")
-    FONT_SIZE_SMALLER=$(float_multiple_round 18 "$scale")
+    DESKTOP_IMAGE=background.png
+    DESKTOP_IMAGE_SCALE_METHOD=crop
 
-    # title
+    TITLE_TEXT=" "
 
-    TITLE_WIDTH=$(float_multiple_round 850 "$scale")
-    TITLE_TOP=$(float_multiple_round 54 "$scale")
-    TITLE_HEIGHT=$(
-        float_multiple_round \
-            "$TITLE_WIDTH" \
-            "$(identify -format '%h/%w' $ASSETS_DIR/images/title.png)" \
-            "$scale"
-    )
+    MESSAGE_FONT="$font_larger"
 
-    # boot menu
+    BRAND_LEFT=0
+    BRAND_WIDTH=$(float_multiple_round 850 "$scale")
+    BRAND_TOP=$(float_multiple_round 54 "$scale")
+    BRAND_HEIGHT=$(float_multiple_round "$BRAND_WIDTH" "$brand_h2w_ratio") # TODO: to multiple '$scale' necessary?
+    BRAND_FILE=brand.png
 
+    BOOT_MENU_LEFT=0
     BOOT_MENU_WIDTH=$(float_multiple_round 667 "$scale")
     BOOT_MENU_TOP=$(float_multiple_round 300 "$scale")
     BOOT_MENU_HEIGHT=84%-$BOOT_MENU_TOP
 
-    # icon
-
-    ICON_SIZE=$(float_multiple_round 36 "$scale")
-
-    # item
+    ICON_WIDTH=$icon_size
+    ICON_HEIGHT=$icon_size
 
     ITEM_HEIGHT=$(float_multiple_round 68 "$scale")
+    ITEM_PADDING=0
     ITEM_ICON_SPACE=$(float_multiple_round 18 "$scale")
     ITEM_SPACING=$(float_multiple_round 16 "$scale")
-    ITEM_COLOR_HEX=#ee858c
-    [[ ${opts[c]} = blue ]] && \
-        ITEM_COLOR_HEX=#45bbff
+    ITEM_COLOR=#ee858c
+    [[ $item_color_style = blue ]] && \
+        ITEM_COLOR=#45bbff
+    ITEM_FONT="$font_larger"
+    ITEM_PIXMAP_STYLE='item_*.png'
 
-    # timeout prompt
+    SELECTED_ITEM_COLOR=#926453
+    SELECTED_ITEM_FONT="$font_larger"
+    SELECTED_ITEM_PIXMAP_STYLE='selected_item_*.png'
 
     TIMEOUT_LEFT=$(float_multiple_round 77 "$scale")
     TIMEOUT_TOP=$(
         round "$(
             bc -l \
-                <<< "($TITLE_TOP + $TITLE_HEIGHT + $BOOT_MENU_TOP) / 2 \
-                    - $FONT_SIZE_LARGER * 3 / 4"
+                <<< "($BRAND_TOP + $BRAND_HEIGHT + $BOOT_MENU_TOP) / 2 \
+                    - $font_size_larger * 3 / 4"
         )"
     )
+    TIMEOUT_ALIGN=center
+    TIMEOUT_FONT="$font_larger"
     TIMEOUT_TEXT="Selected OS will be booted in %d seconds"
     [[ ${opts[l]} = zh-CN ]] && \
         TIMEOUT_TEXT="所选操作系统将在 %d 秒后启动"
@@ -269,133 +353,177 @@ main() {
         TIMEOUT_TEXT="चयनित OS %d सेकंड में बूट हो जाएगा"
     [[ ${opts[l]} = it ]] && \
         TIMEOUT_TEXT="Il sistema operativo selezionato verrà avviato in %d secondi"
-        
-    # terminal
+    TIMEOUT_COLOR=#777777
 
-    TERMINAL_LEFT=$(float_multiple_round 19 "$scale")
-    TERMINAL_WIDTH=46%
+    TERMINAL_FONT="$font_smaller"
+    TERMINAL_BOX='terminal_box_*.png'
+    TERMINAL_LEFT=$(float_multiple_round 32 "$scale")
+    TERMINAL_WIDTH=48%
     TERMINAL_TOP=$(
         round "$(
             bc -l \
-                <<< "($TITLE_TOP + $TITLE_HEIGHT + $BOOT_MENU_TOP) / 2"
+                <<< "($BRAND_TOP + $BRAND_HEIGHT + $BOOT_MENU_TOP) / 2"
         )"
     )
     TERMINAL_HEIGHT=84%-$TERMINAL_TOP
+    TERMINAL_BORDER=0
 
-    # ===== Theme Generation =====
+    #   4. For customized config script
 
-    # create necessary directories
+    BACKGROUND_COLOR=#FFF9F2
+    COLOR_NORMAL=dark-gray/black
 
-    mkdir -v -p "$build_dir/icons"
+    # >>> Stage D: Generate theme
 
-    # copy background
+    #   1. Create necessary directories
 
-    cp -v $ASSETS_DIR/images/background.png "$build_dir"
+    mkdir -v -p "$theme_output_dir/icons"
 
-    # create fonts
+    #   2. Copy background image (desktop image)
 
-    for font_size in $FONT_SIZE_LARGER \
-        $FONT_SIZE_SMALLER;
-    do
+    cp -v $ASSETS_DIR/images/$DESKTOP_IMAGE "$theme_output_dir"
+
+    #   3. Create fonts
+
+    for font_size in $font_size_larger $font_size_smaller; do
         grub-mkfont -v \
             --name="$FONT_NAME" \
             --size="$font_size" \
-            --output="$build_dir/${FONT_FILENAME%.*}-$font_size.pf2" \
-            $ASSETS_DIR/fonts/$FONT_FILENAME
+            --output="$theme_output_dir/${FONT_FILE%.*}-$font_size.pf2" \
+            $ASSETS_DIR/fonts/$FONT_FILE
     done
 
-    # copy font license
+    #   4. Copy font license
 
-    cp -v $ASSETS_DIR/fonts/OFL.txt "$build_dir"
+    cp -v $ASSETS_DIR/fonts/OFL.txt "$theme_output_dir"
 
-    # copy terminal box elements
+    #   5. Convert brand picture
 
-    cp -v $ASSETS_DIR/images/terminal_box/* "$build_dir"
+    ffmpeg -loglevel trace \
+        -i $ASSETS_DIR/images/brand.png \
+        -vf "scale=$BRAND_WIDTH:-1" \
+        "$theme_output_dir/brand.png"
 
-    # convert title
-
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i $ASSETS_DIR/images/title.png \
-        -vf "scale=$TITLE_WIDTH:-1" \
-        "$build_dir/title.png"
-
-    # convert distro icons
+    #   6. Convert distro icons
 
     for icon in "$ASSETS_DIR"/icons/*; do
-        ffmpeg -loglevel $FFMPEG_LOGLEVEL \
+        ffmpeg -loglevel trace \
             -i "$icon" \
-            -vf "scale=$ICON_SIZE:$ICON_SIZE" \
-            "$build_dir/icons/$(basename "$icon")"
+            -vf "scale=$ICON_WIDTH:$ICON_HEIGHT" \
+            "$theme_output_dir/icons/$(basename "$icon")"
     done
 
-    # convert unselected item elements
+    #   7. Convert unselected item elements
 
     # west
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i "$ASSETS_DIR/images/item/$item_color/item_w_c.png" \
+    ffmpeg -loglevel trace \
+        -i "$ASSETS_DIR/images/item/$item_color_style/item_w_c.png" \
         -vf "scale=$item_w_width:$ITEM_HEIGHT" \
-        "$build_dir/item_w.png"
+        "$theme_output_dir/item_w.png"
 
     # central
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i "$ASSETS_DIR/images/item/$item_color/item_w_c.png" \
+    ffmpeg -loglevel trace \
+        -i "$ASSETS_DIR/images/item/$item_color_style/item_w_c.png" \
         -vf "scale=1:$ITEM_HEIGHT" \
-        "$build_dir/item_c.png"
+        "$theme_output_dir/item_c.png"
 
     # east
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i "$ASSETS_DIR/images/item/$item_color/item_e.png" \
+    ffmpeg -loglevel trace \
+        -i "$ASSETS_DIR/images/item/$item_color_style/item_e.png" \
         -vf "scale=-1:$ITEM_HEIGHT" \
-        "$build_dir/item_e.png"
+        "$theme_output_dir/item_e.png"
 
-    # convert selected item elements
+    #   8. Convert selected item elements
 
     # west
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i "$ASSETS_DIR/images/selected_item/$item_color/selected_item_w_c.png" \
+    ffmpeg -loglevel trace \
+        -i "$ASSETS_DIR/images/selected_item/$item_color_style/selected_item_w_c.png" \
         -vf "scale=$item_w_width:$ITEM_HEIGHT" \
-        "$build_dir/selected_item_w.png"
+        "$theme_output_dir/selected_item_w.png"
     
     # central
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i "$ASSETS_DIR/images/selected_item/$item_color/selected_item_w_c.png" \
+    ffmpeg -loglevel trace \
+        -i "$ASSETS_DIR/images/selected_item/$item_color_style/selected_item_w_c.png" \
         -vf "scale=1:$ITEM_HEIGHT" \
-        "$build_dir/selected_item_c.png"
+        "$theme_output_dir/selected_item_c.png"
 
     # east
-    ffmpeg -loglevel $FFMPEG_LOGLEVEL \
-        -i "$ASSETS_DIR/images/selected_item/$item_color/selected_item_e.png" \
+    ffmpeg -loglevel trace \
+        -i "$ASSETS_DIR/images/selected_item/$item_color_style/selected_item_e.png" \
         -vf "scale=-1:$ITEM_HEIGHT" \
-        "$build_dir/selected_item_e.png"
+        "$theme_output_dir/selected_item_e.png"
 
-    # generate theme configuration
+    #   9. Create terminal box elements
 
-    export TITLE_WIDTH
-    export TITLE_TOP
-    export TITLE_HEIGHT
+    gen_terminal_box
+
+    #   10. Generate theme config
+
+    export DESKTOP_IMAGE
+    export DESKTOP_IMAGE_SCALE_METHOD
+
+    export TITLE_TEXT
+
+    export MESSAGE_FONT
+
+    export BRAND_LEFT
+    export BRAND_WIDTH
+    export BRAND_TOP
+    export BRAND_HEIGHT
+    export BRAND_FILE
+
+    export BOOT_MENU_LEFT
+    export BOOT_MENU_WIDTH
+    export BOOT_MENU_TOP
+    export BOOT_MENU_HEIGHT
+
+    export ICON_WIDTH
+    export ICON_HEIGHT
+
+    export ITEM_HEIGHT
+    export ITEM_PADDING
+    export ITEM_ICON_SPACE
+    export ITEM_SPACING
+    export ITEM_COLOR
+    export ITEM_FONT
+    export ITEM_PIXMAP_STYLE
+
+    export SELECTED_ITEM_COLOR
+    export SELECTED_ITEM_FONT
+    export SELECTED_ITEM_PIXMAP_STYLE
+
     export TIMEOUT_LEFT
     export TIMEOUT_TOP
+    export TIMEOUT_ALIGN
+    export TIMEOUT_FONT
     export TIMEOUT_TEXT
-    export FONT_NAME
-    export FONT_STYLE
-    export FONT_SIZE_LARGER
-    export FONT_SIZE_SMALLER
+
+    export TIMEOUT_COLOR
+
+    export TERMINAL_FONT
+    export TERMINAL_BOX
     export TERMINAL_LEFT
     export TERMINAL_WIDTH
     export TERMINAL_TOP
     export TERMINAL_HEIGHT
-    export BOOT_MENU_WIDTH
-    export BOOT_MENU_TOP
-    export BOOT_MENU_HEIGHT
-    export ICON_SIZE
-    export ITEM_HEIGHT
-    export ITEM_ICON_SPACE
-    export ITEM_SPACING
-    export ITEM_COLOR_HEX
+    export TERMINAL_BORDER
 
-    envsubst < $ASSETS_DIR/theme.txt.conf | tee "$build_dir/theme.txt"
+    envsubst < $ASSETS_DIR/theme.txt.template | tee "$theme_output_dir/theme.txt"
+
+    #   11. Generate customized config script
+
+    echo
+
+    export BACKGROUND_COLOR
+    export COLOR_NORMAL
+
+    envsubst < $ASSETS_DIR/98_mahiro.template | tee "$BUILD_DIR/98_mahiro"
+    chmod -v +x "$BUILD_DIR/98_mahiro"
 }
 
+#-------------------------------------------------------------------------------
+# Program Entry
+#-------------------------------------------------------------------------------
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
     echo_err "Do not 'source' this script. You should run it directly."
     exit 1
@@ -403,7 +531,7 @@ elif [[ "$(pwd -P)" != "$(cd "$(dirname "$0")" && pwd -P)" ]]; then
     echo_err "You should run this script in the project root directory."
     exit 1
 else
-    for cmd in bc grub-mkfont ffmpeg identify; do
+    for cmd in bc grub-mkfont ffmpeg identify convert; do
         command -v $cmd >& /dev/null || {
             echo_err "command '$cmd' not found"
             exit 1

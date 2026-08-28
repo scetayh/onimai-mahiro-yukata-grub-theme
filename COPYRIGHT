@@ -16,7 +16,3 @@ Files: assets/images/item/*
  . assets/images/title.png
 Copyright: ねことうふ・一迅社／「おにまい」製作委員会 (https://onimai.jp/)
 License: UNKNOWN
-
-Files: assets/images/terminal_box/*
-Copyright: AdisonCavani (https://github.com/AdisonCavani/distro-grub-themes)
-License: GPL-3.0

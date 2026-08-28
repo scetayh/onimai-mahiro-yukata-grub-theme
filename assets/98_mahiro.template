@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "background_color \"${BACKGROUND_COLOR}\""
+echo "set color_normal=\"${COLOR_NORMAL}\""
