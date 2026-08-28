@@ -528,12 +528,12 @@ main() {
 
     #   11. Generate customized config script
 
-    echo
-
     export BACKGROUND_COLOR
     export COLOR_NORMAL
 
+    echo
     envsubst < $ASSETS_DIR/98_mahiro.template | tee "$BUILD_DIR/98_mahiro"
+    echo
     chmod -v +x "$BUILD_DIR/98_mahiro"
 }
 
