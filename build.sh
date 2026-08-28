@@ -293,7 +293,7 @@ main() {
     BRAND_LEFT=0
     BRAND_WIDTH=$(float_multiple_round 850 "$scale")
     BRAND_TOP=$(float_multiple_round 54 "$scale")
-    BRAND_HEIGHT=$(float_multiple_round "$BRAND_WIDTH" "$brand_h2w_ratio") # TODO: to multiple '$scale' necessary?
+    BRAND_HEIGHT=$(float_multiple_round "$BRAND_WIDTH" "$brand_h2w_ratio")
     BRAND_FILE=brand.png
 
     BOOT_MENU_LEFT=0
@@ -328,31 +328,47 @@ main() {
     )
     TIMEOUT_ALIGN=center
     TIMEOUT_FONT="$font_larger"
-    TIMEOUT_TEXT="Selected OS will be booted in %d seconds"
-    [[ ${opts[l]} = zh-CN ]] && \
-        TIMEOUT_TEXT="所选操作系统将在 %d 秒后启动"
-    [[ ${opts[l]} = zh-TW ]] && \
-        TIMEOUT_TEXT="所選作業系統將在 %d 秒後啟動"
-    [[ ${opts[l]} = es ]] && \
-        TIMEOUT_TEXT="El sistema operativo seleccionado se iniciará en %d segundos"
-    [[ ${opts[l]} = fr ]] && \
-        TIMEOUT_TEXT="Le système d'exploitation sélectionné sera démarré dans %d secondes"
-    [[ ${opts[l]} = de ]] && \
-        TIMEOUT_TEXT="Das ausgewählte Betriebssystem wird in %d Sekunden gestartet"
-    [[ ${opts[l]} = ja ]] && \
-        TIMEOUT_TEXT="選択されたOSは %d 秒後に起動します"
-    [[ ${opts[l]} = ko ]] && \
-        TIMEOUT_TEXT="선택한 운영 체제가 %d 초 후에 부팅됩니다"
-    [[ ${opts[l]} = ru ]] && \
-        TIMEOUT_TEXT="Выбранная ОС будет загружена через %d секунд"
-    [[ ${opts[l]} = ar ]] && \
-        TIMEOUT_TEXT="سيتم تشغيل نظام التشغيل المحدد خلال %d ثانية"
-    [[ ${opts[l]} = pt ]] && \
-        TIMEOUT_TEXT="O sistema operacional selecionado será inicializado em %d segundos"
-    [[ ${opts[l]} = hi ]] && \
-        TIMEOUT_TEXT="चयनित OS %d सेकंड में बूट हो जाएगा"
-    [[ ${opts[l]} = it ]] && \
-        TIMEOUT_TEXT="Il sistema operativo selezionato verrà avviato in %d secondi"
+    case ${opts[l]} in
+        zh-CN)
+            TIMEOUT_TEXT="所选操作系统将在 %d 秒后启动"
+            ;;
+        zh-TW)
+            TIMEOUT_TEXT="所選作業系統將在 %d 秒後啟動"
+            ;;
+        es)
+            TIMEOUT_TEXT="El sistema operativo seleccionado se iniciará en %d segundos"
+            ;;
+        fr)
+            TIMEOUT_TEXT="Le système d'exploitation sélectionné sera démarré dans %d secondes"
+            ;;
+        de)
+            TIMEOUT_TEXT="Das ausgewählte Betriebssystem wird in %d Sekunden gestartet"
+            ;;
+        ja)
+            TIMEOUT_TEXT="選択されたOSは %d 秒後に起動します"
+            ;;
+        ko)
+            TIMEOUT_TEXT="선택한 운영 체제가 %d 초 후에 부팅됩니다"
+            ;;
+        ru)
+            TIMEOUT_TEXT="Выбранная ОС будет загружена через %d секунд"
+            ;;
+        ar)
+            TIMEOUT_TEXT="سيتم تشغيل نظام التشغيل المحدد خلال %d ثانية"
+            ;;
+        pt)
+            TIMEOUT_TEXT="O sistema operacional selecionado será inicializado em %d segundos"
+            ;;
+        hi)
+            TIMEOUT_TEXT="चयनित OS %d सेकंड में बूट हो जाएगा"
+            ;;
+        it)
+            TIMEOUT_TEXT="Il sistema operativo selezionato verrà avviato in %d secondi"
+            ;;
+        *)
+            TIMEOUT_TEXT="Selected OS will be booted in %d seconds"
+            ;;
+    esac
     TIMEOUT_COLOR=#777777
 
     TERMINAL_FONT="$font_smaller"
