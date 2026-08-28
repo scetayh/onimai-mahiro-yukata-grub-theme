@@ -1,0 +1,67 @@
+# DESKTOP_IMAGE*
+desktop-image: "${DESKTOP_IMAGE}"
+desktop-image-scale-method: "${DESKTOP_IMAGE_SCALE_METHOD}"
+
+# TITLE_TEXT*
+title-text: "${TITLE_TEXT}"
+
+# MESSAGE_FONT*
+message-font: "${MESSAGE_FONT}"
+
++ image {
+  id = "brand"
+
+  # BRAND_FILE*
+  left = ${BRAND_LEFT}
+  width = ${BRAND_WIDTH}
+  top = ${BRAND_TOP}
+  height = ${BRAND_HEIGHT}
+  file = "${BRAND_FILE}"
+}
+
++ boot_menu {
+  # BOOT_MENU*
+  left = ${BOOT_MENU_LEFT}
+  width = ${BOOT_MENU_WIDTH}
+  top = ${BOOT_MENU_TOP}
+  height = ${BOOT_MENU_HEIGHT}
+
+  # ICON*
+  icon_width = ${ICON_WIDTH}
+  icon_height = ${ICON_HEIGHT}
+
+  # ITEM*
+  item_height = ${ITEM_HEIGHT}
+  item_padding = ${ITEM_PADDING}
+  item_icon_space = ${ITEM_ICON_SPACE}
+  item_spacing = ${ITEM_SPACING}
+  item_color = "${ITEM_COLOR}"
+  item_font = "${ITEM_FONT}"
+  item_pixmap_style = "${ITEM_PIXMAP_STYLE}"
+
+  # SELECTED_ITEM*
+  selected_item_color = "${SELECTED_ITEM_COLOR}"
+  selected_item_font = "${SELECTED_ITEM_FONT}"
+  selected_item_pixmap_style = "${SELECTED_ITEM_PIXMAP_STYLE}"
+}
+
++ label {
+  id = "__timeout__"
+
+  # TIMEOUT*
+  left = ${TIMEOUT_LEFT}
+  top = ${TIMEOUT_TOP}
+  align = ${TIMEOUT_ALIGN}
+  font = "${TIMEOUT_FONT}"
+  text = "${TIMEOUT_TEXT}"
+  color = "${TIMEOUT_COLOR}"
+}
+
+# TERMINAL*
+terminal-font: "${TERMINAL_FONT}"
+terminal-box: "${TERMINAL_BOX}"
+terminal-left: "${TERMINAL_LEFT}"
+terminal-width: "${TERMINAL_WIDTH}"
+terminal-top: "${TERMINAL_TOP}"
+terminal-height: "${TERMINAL_HEIGHT}"
+terminal-border: "${TERMINAL_BORDER}"
