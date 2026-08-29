@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo "background_color \"${BACKGROUND_COLOR}\""
-echo "set color_normal=\"${COLOR_NORMAL}\""
+printf 'background_color "%s"\n' "${BACKGROUND_COLOR}"
+printf 'set color_normal="%s"\n' "${COLOR_NORMAL}"
