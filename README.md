@@ -18,11 +18,10 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 
 ## Features
 
-- Script-controlled build process
+- Script-controlled process of build & *installation (since v0.3.2)*
 - Depends on ImageMagick, FFmpeg, etc.
-- Boot menu item styling supports **pink** and **blue** color schemes with corresponding gender symbols
-- Timeout prompt supports several common languages
-- Unified-style GRUB command-line interface (since v0.3.0-beta.1)
+- Boot menu item and *CLI (since v0.3.2)*  styling supports **pink** and **blue** color schemes with corresponding gender symbols
+- Timeout prompt supports multiple languages
 - Customizable scaling ratio
 
 ## Getting Started
