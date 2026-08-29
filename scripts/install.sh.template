@@ -32,8 +32,7 @@ Options:
     --skip-set-theme
       Skip appending the line that sets variable "GRUB_THEME" to the
       '${GRUB_DEFAULT_CONFIG}' file.
-      Note: if this flag is specified, remember to modify the default file
-      manually.
+      Note: if enabled, remember to set the variable manually.
 EOF
 }
 
