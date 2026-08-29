@@ -37,8 +37,7 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 - `getopt`
 - `bc`
 - `grub-mkfont` (GRUB)
-- `magick` (ImageMagick)
-- `convert` (if ImageMagick version is less than 7)
+- `magick` or `convert` (ImageMagick)
 - `identify` (ImageMagick)
 
 ### Build

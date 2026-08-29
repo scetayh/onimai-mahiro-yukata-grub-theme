@@ -121,7 +121,7 @@ EOF
 main() {
     # >>> Stage A: Check command existence and versions
 
-    for cmd in bc grub-mkfont identify magick convert; do
+    for cmd in bc grub-mkfont identify convert; do
         command -v $cmd >& /dev/null || {
             echo_err "command '$cmd' not found"
             exit 1

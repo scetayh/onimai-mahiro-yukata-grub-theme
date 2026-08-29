@@ -37,8 +37,7 @@
 - `getopt`
 - `bc`
 - `grub-mkfont` (GRUB)
-- `magick` (ImageMagick)
-- `convert` (如果 ImageMagick 版本小于 7)
+- `magick` 或 `convert` (ImageMagick)
 - `identify` (ImageMagick)
 
 ### 构建
