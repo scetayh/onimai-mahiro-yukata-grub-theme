@@ -31,12 +31,15 @@ This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGR
 
 ### Dependencies
 
+> [!NOTE]  
+> Starting from v0.3.3, the build of this theme no longer relies on FFmpeg.
+
 - `getopt`
 - `bc`
 - `grub-mkfont` (GRUB)
-- `ffmpeg`
+- `magick` (ImageMagick)
+- `convert` (if ImageMagick version is less than 7)
 - `identify` (ImageMagick)
-- `convert` (ImageMagick)
 
 ### Build
 

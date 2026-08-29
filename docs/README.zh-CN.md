@@ -31,12 +31,15 @@
 
 ### 依赖
 
+> [!NOTE]  
+> 自 v0.3.3 起，本主题的构建不再依赖 FFmpeg 。
+
 - `getopt`
 - `bc`
 - `grub-mkfont` (GRUB)
-- `ffmpeg`
+- `magick` (ImageMagick)
+- `convert` (如果 ImageMagick 版本小于 7)
 - `identify` (ImageMagick)
-- `convert` (ImageMagick)
 
 ### 构建
 
