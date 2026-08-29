@@ -1,1 +1,4 @@
 build/
+.gitignore
+test.sh
+update.sh
