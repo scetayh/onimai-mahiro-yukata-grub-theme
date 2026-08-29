@@ -63,7 +63,7 @@ cd onimai-mahiro-yukata-grub-theme/
 ### 安装
 
 > [!TIP]
-> 自 v0.3.2 起，用户可以运行 `build/` 目录（直接下载主题的则为包的同名目录，如 `onimai-mahiro-yukata-grub-theme-blue-ja-0.3.2\` ）下的 `install.sh` 脚本完成安装。希望手动安装的用户请继续阅读。
+> 自 v0.3.2 起，用户可以运行 `build/` 目录（直接下载主题的则为包的同名目录，如 `onimai-mahiro-yukata-grub-theme-blue-ja-0.3.2/` ）下的 `install.sh` 脚本完成安装。希望手动安装的用户请继续阅读。
 
 如果没有在脚本中使用 `-S` 或 `--suffix` 选项指定后缀，那么构建产物的主题部分应该位于 `build/themes/onimai_mahiro_yukata` 。将其复制到本地的 GRUB 主题目录下，这通常是 `/boot/grub/themes/`：
 

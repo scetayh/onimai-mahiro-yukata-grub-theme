@@ -64,7 +64,7 @@ The build artifact is located at `build/`, which includes the **theme section** 
 ### Installation
 
 > [!TIP]
-> Starting from v0.3.2, users can run the `install.sh` script under the `build/` directory (for directly downloaded themes, it is the same named directory as the package, such as `onimai-mahiro-yukata-grub-theme-blue-ja-0.3.2\`) to complete the installation. For users who wish to manually install, please continue reading.
+> Starting from v0.3.2, users can run the `install.sh` script under the `build/` directory (for directly downloaded themes, it is the same named directory as the package, such as `onimai-mahiro-yukata-grub-theme-blue-ja-0.3.2/`) to complete the installation. For users who wish to manually install, please continue reading.
 
 If the suffix is not specified using the `-S` or `--suffix` options in the script, the build artifact should be located at `build/themes/animai_mahiro_yukata`. Copy it to your local GRUB themes directory, which is typically `/boot/grub/themes/`:
 
