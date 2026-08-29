@@ -9,7 +9,7 @@ IFS=$'\n\t'
 #-------------------------------------------------------------------------------
 SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 readonly SCRIPT_NAME
-readonly VERSION=0.3.2
+readonly VERSION=0.3.3
 
 readonly MAXCOL=80
 
@@ -104,119 +104,35 @@ Options:
       Sepcify the timeout prompt language. [default: en]
       Available languages: 'en', 'zh-CN', 'zh-TW', 'es', 'fr', 'de', 'ja', 'ko',
       'ru', 'ar', 'pt', 'hi', 'it'.
+    -v, --verbose
+      Display detailed information.
 
 Examples:
   $0 -l zh-CN
-  $0 -s 1.5 -c blue -l zh-TW
-  $0 --color=pink --language=ja
+  $0 -s 1.5 -c blue -l zh-TW -v
+  $0 --color=pink --language=ja --verbose
   $0 --scale 0.75 --color blue --language en --suffix=_tux
 EOF
-}
-
-gen_terminal_box() {
-    local border_outer_thickness=5
-    local border_inner_thickness=9
-
-    local border_outer_color="${ONIMAI_YELLOW}"
-    local border_inner_color="${ONIMAI_PINK}"
-    [[ $color_style = blue ]] && \
-        border_inner_color="${ONIMAI_BLUE}"
-
-    local output_prefix="$BUILD_DIR/$THEME_DIR/terminal_box"
-
-    local fillet_radius=$((border_outer_thickness + border_inner_thickness + 2))
-    local full_image_sidelen=$((fillet_radius * 2 + 1))
-
-    local border_outer_x1=0
-    local border_outer_y1=0
-    local border_outer_x2=$((full_image_sidelen - 1))
-    local border_outer_y2=$((full_image_sidelen - 1))
-    local border_outer_radius=$fillet_radius
-
-    local border_inner_x1=$border_outer_thickness
-    local border_inner_y1=$border_outer_thickness
-    local border_inner_x2=$((full_image_sidelen - 1 - border_outer_thickness))
-    local border_inner_y2=$((full_image_sidelen - 1 - border_outer_thickness))
-    local border_inner_radius=$((fillet_radius - border_outer_thickness))
-
-    local content_x1=$((border_outer_thickness + border_inner_thickness))
-    local content_y1=$((border_outer_thickness + border_inner_thickness))
-    local content_x2=$((
-        full_image_sidelen - 1 - border_outer_thickness - border_inner_thickness
-    ))
-    local content_y2=$((
-        full_image_sidelen - 1 - border_outer_thickness - border_inner_thickness
-    ))
-    local content_radius=$((
-        fillet_radius - border_outer_thickness - border_inner_thickness
-    ))
-
-    local tmp
-    tmp=$(mktemp -d "/tmp/XXXXXXXXXX")
-
-    local full_image="$tmp/full_image.png"
-
-    convert -size ${full_image_sidelen}x${full_image_sidelen} xc:none \
-        -fill "$border_outer_color" \
-            -draw "roundrectangle $border_outer_x1,$border_outer_y1 $border_outer_x2,$border_outer_y2 $border_outer_radius,$border_outer_radius" \
-        -fill "$border_inner_color" \
-            -draw "roundrectangle $border_inner_x1,$border_inner_y1 $border_inner_x2,$border_inner_y2 $border_inner_radius,$border_inner_radius" \
-        -fill "$BACKGROUND_COLOR" \
-            -draw "roundrectangle $content_x1,$content_y1 $content_x2,$content_y2 $content_radius,$content_radius" \
-        -alpha on -colorspace sRGB \
-        "$full_image"
-
-    local default_opts=(+repage -alpha on -define png:format=png32)
-    convert "$full_image" \
-        -crop ${fillet_radius}x${fillet_radius}+0+0 \
-        "${default_opts[@]}" \
-        "${output_prefix}_nw.png"
-    convert "$full_image" \
-        -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+0 \
-        "${default_opts[@]}" \
-        "${output_prefix}_n.png"
-    convert "$full_image" \
-        -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+0 \
-        "${default_opts[@]}" \
-        "${output_prefix}_ne.png"
-    convert "$full_image" \
-        -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+0+${fillet_radius} \
-        "${default_opts[@]}" \
-        "${output_prefix}_w.png"
-    convert "$full_image" \
-        -crop $((full_image_sidelen - 2*fillet_radius))x$((full_image_sidelen - 2*fillet_radius))+${fillet_radius}+${fillet_radius} \
-        "${default_opts[@]}" \
-        "${output_prefix}_c.png"
-    convert "$full_image" \
-        -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+$((full_image_sidelen - fillet_radius))+${fillet_radius} \
-        "${default_opts[@]}" \
-        "${output_prefix}_e.png"
-    convert "$full_image" \
-        -crop ${fillet_radius}x${fillet_radius}+0+$((full_image_sidelen - fillet_radius)) \
-        "${default_opts[@]}" \
-        "${output_prefix}_sw.png"
-    convert "$full_image" \
-        -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+$((full_image_sidelen - fillet_radius)) \
-        "${default_opts[@]}" \
-        "${output_prefix}_s.png"
-    convert "$full_image" \
-        -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+$((full_image_sidelen - fillet_radius)) \
-        "${default_opts[@]}" \
-        "${output_prefix}_se.png"
 }
 
 #-------------------------------------------------------------------------------
 # Main Functions
 #-------------------------------------------------------------------------------
 main() {
-    # >>> Stage A: Check command existence
+    # >>> Stage A: Check command existence and versions
 
-    for cmd in bc grub-mkfont ffmpeg identify convert; do
+    for cmd in bc grub-mkfont identify magick convert; do
         command -v $cmd >& /dev/null || {
             echo_err "command '$cmd' not found"
             exit 1
         }
     done
+
+    if magick -version 2>/dev/null | grep -q "ImageMagick 7"; then
+        convert_cmd=(magick)
+    else
+        convert_cmd=(convert)
+    fi
 
     # >>> Stage B: Check work directory
 
@@ -227,8 +143,8 @@ main() {
 
     # >>> Stage C: Parse arguments
 
-    short_opts=hVs:S:c:l:
-    long_opts=help,version,scale:,suffix:,color:,language:
+    short_opts=hVs:S:c:l:v
+    long_opts=help,version,scale:,suffix:,color:,language:,verbose,
 
     opts="$(getopt -o "$short_opts" -l "$long_opts" -n "$0" -- "$@")"
     eval set -- "$opts"
@@ -260,6 +176,10 @@ main() {
             -l|--language)
                 params[l]="$2"
                 shift 2
+                ;;
+            -v|--verbose)
+                flags[v]=
+                shift 1
                 ;;
             --)
                 shift 1
@@ -315,6 +235,16 @@ main() {
             return 1
         }
     }
+
+    #   4. Flags
+
+    if [[ -v flags[v] ]]; then
+        default_opts=(-v)
+        convert_default_opts=(-debug Exception)
+    else
+        default_opts=()
+        convert_default_opts=()
+    fi
 
     # >>> Stage E: Declare variables
 
@@ -455,16 +385,16 @@ main() {
 
     #   1. Create necessary directories
 
-    mkdir -v -p "$BUILD_DIR/$THEME_DIR/icons"
+    mkdir "${default_opts[@]}" -p "$BUILD_DIR/$THEME_DIR/icons"
 
     #   2. Copy background image (desktop image)
 
-    cp -v $ASSETS_DIR/images/$DESKTOP_IMAGE "$BUILD_DIR/$THEME_DIR"
+    cp "${default_opts[@]}" $ASSETS_DIR/images/$DESKTOP_IMAGE "$BUILD_DIR/$THEME_DIR"
 
     #   3. Create fonts
 
     for font_size in $font_size_larger $font_size_smaller; do
-        grub-mkfont -v \
+        grub-mkfont "${default_opts[@]}" \
             --name="$FONT_NAME" \
             --size="$font_size" \
             --output="$BUILD_DIR/$THEME_DIR/${FONT_FILE%.*}-$font_size.pf2" \
@@ -473,67 +403,158 @@ main() {
 
     #   4. Copy font license
 
-    cp -v $ASSETS_DIR/fonts/OFL.txt "$BUILD_DIR/$THEME_DIR"
+    cp "${default_opts[@]}" $ASSETS_DIR/fonts/OFL.txt "$BUILD_DIR/$THEME_DIR"
 
     #   5. Convert brand picture
 
-    ffmpeg -loglevel trace \
-        -i $ASSETS_DIR/images/brand.png \
-        -vf "scale=$BRAND_WIDTH:-1" \
+    convert_default_opts+=(-define png:format=png32)
+
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/brand.png" \
+        -resize "${BRAND_WIDTH}x" \
         "$BUILD_DIR/$THEME_DIR/brand.png"
 
     #   6. Convert distro icons
 
     for icon in "$ASSETS_DIR"/icons/*; do
-        ffmpeg -loglevel trace \
-            -i "$icon" \
-            -vf "scale=$ICON_WIDTH:$ICON_HEIGHT" \
+        "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+            "$icon" \
+            -resize "${ICON_WIDTH}x${ICON_HEIGHT}!" \
             "$BUILD_DIR/$THEME_DIR/icons/$(basename "$icon")"
     done
 
     #   7. Convert unselected item elements
 
     # west
-    ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
-        -vf "scale=$item_w_width:$ITEM_HEIGHT" \
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
+        -resize "${item_w_width}x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/item_w.png"
 
     # central
-    ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
-        -vf "scale=1:$ITEM_HEIGHT" \
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
+        -resize "1x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/item_c.png"
 
     # east
-    ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/item/$color_style/item_e.png" \
-        -vf "scale=-1:$ITEM_HEIGHT" \
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/item/$color_style/item_e.png" \
+        -resize "x${ITEM_HEIGHT}" \
         "$BUILD_DIR/$THEME_DIR/item_e.png"
 
     #   8. Convert selected item elements
 
     # west
-    ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
-        -vf "scale=$item_w_width:$ITEM_HEIGHT" \
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
+        -resize "${item_w_width}x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/selected_item_w.png"
-    
+
     # central
-    ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
-        -vf "scale=1:$ITEM_HEIGHT" \
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
+        -resize "1x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/selected_item_c.png"
 
     # east
-    ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/selected_item/$color_style/selected_item_e.png" \
-        -vf "scale=-1:$ITEM_HEIGHT" \
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        "$ASSETS_DIR/images/selected_item/$color_style/selected_item_e.png" \
+        -resize "x${ITEM_HEIGHT}" \
         "$BUILD_DIR/$THEME_DIR/selected_item_e.png"
 
     #   9. Create terminal box elements
 
-    gen_terminal_box
+    border_outer_thickness=5
+    border_inner_thickness=9
+
+    border_outer_color="${ONIMAI_YELLOW}"
+    border_inner_color="${ONIMAI_PINK}"
+    [[ $color_style = blue ]] && \
+        border_inner_color="${ONIMAI_BLUE}"
+
+    output_prefix="$BUILD_DIR/$THEME_DIR/terminal_box"
+
+    fillet_radius=$((border_outer_thickness + border_inner_thickness + 2))
+    full_image_sidelen=$((fillet_radius * 2 + 1))
+
+    border_outer_x1=0
+    border_outer_y1=0
+    border_outer_x2=$((full_image_sidelen - 1))
+    border_outer_y2=$((full_image_sidelen - 1))
+    border_outer_radius=$fillet_radius
+
+    border_inner_x1=$border_outer_thickness
+    border_inner_y1=$border_outer_thickness
+    border_inner_x2=$((full_image_sidelen - 1 - border_outer_thickness))
+    border_inner_y2=$((full_image_sidelen - 1 - border_outer_thickness))
+    border_inner_radius=$((fillet_radius - border_outer_thickness))
+
+    content_x1=$((border_outer_thickness + border_inner_thickness))
+    content_y1=$((border_outer_thickness + border_inner_thickness))
+    content_x2=$((
+        full_image_sidelen - 1 - border_outer_thickness - border_inner_thickness
+    ))
+    content_y2=$((
+        full_image_sidelen - 1 - border_outer_thickness - border_inner_thickness
+    ))
+    content_radius=$((
+        fillet_radius - border_outer_thickness - border_inner_thickness
+    ))
+
+    tmp=$(mktemp -d "/tmp/XXXXXXXXXX")
+
+    full_image="$tmp/full_image.png"
+
+    "${convert_cmd[@]}" "${convert_default_opts[@]}" \
+        -size ${full_image_sidelen}x${full_image_sidelen} xc:none \
+        -fill "$border_outer_color" \
+        -draw "roundrectangle $border_outer_x1,$border_outer_y1 $border_outer_x2,$border_outer_y2 $border_outer_radius,$border_outer_radius" \
+        -fill "$border_inner_color" \
+        -draw "roundrectangle $border_inner_x1,$border_inner_y1 $border_inner_x2,$border_inner_y2 $border_inner_radius,$border_inner_radius" \
+        -fill "$BACKGROUND_COLOR" \
+        -draw "roundrectangle $content_x1,$content_y1 $content_x2,$content_y2 $content_radius,$content_radius" \
+        -alpha on -colorspace sRGB \
+        "$full_image"
+
+    convert_default_opts+=(+repage -alpha on)
+    
+    "${convert_cmd[@]}" "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+0+0 \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_nw.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+0 \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_n.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+0 \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_ne.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+0+${fillet_radius} \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_w.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop $((full_image_sidelen - 2*fillet_radius))x$((full_image_sidelen - 2*fillet_radius))+${fillet_radius}+${fillet_radius} \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_c.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+$((full_image_sidelen - fillet_radius))+${fillet_radius} \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_e.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+0+$((full_image_sidelen - fillet_radius)) \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_sw.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+$((full_image_sidelen - fillet_radius)) \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_s.png"
+    "${convert_cmd[@]}" "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+$((full_image_sidelen - fillet_radius)) \
+        "${convert_default_opts[@]}" \
+        "${output_prefix}_se.png"
 
     #   10. Generate theme config
 
@@ -590,10 +611,16 @@ main() {
 
     export "${whitelist[@]}"
 
-    envsubst "$(printf '$%s ' "${whitelist[@]}")" \
-        < $ASSETS_DIR/theme.txt.template | \
-            tee "$BUILD_DIR/$THEME_DIR/theme.txt"
-    echo
+    if [[ -v flags[v] ]]; then
+        envsubst "$(printf '$%s ' "${whitelist[@]}")" \
+            < $ASSETS_DIR/theme.txt.template | \
+                tee "$BUILD_DIR/$THEME_DIR/theme.txt"
+        echo >&2
+    else
+        envsubst "$(printf '$%s ' "${whitelist[@]}")" \
+            < $ASSETS_DIR/theme.txt.template \
+                > "$BUILD_DIR/$THEME_DIR/theme.txt"
+    fi
 
     #   11. Generate customized config script
 
@@ -605,11 +632,10 @@ main() {
     export "${whitelist[@]}"
 
     envsubst "$(printf '$%s ' "${whitelist[@]}")" \
-        < $ASSETS_DIR/$GRUB_CUSTOM_CONFIG.template | \
-            tee "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
-    echo
+        < $ASSETS_DIR/$GRUB_CUSTOM_CONFIG.template \
+            > "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
 
-    chmod -v +x "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
+    chmod "${default_opts[@]}" +x "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
 
     #   12. Generate installation script
 
@@ -626,11 +652,14 @@ main() {
     export "${whitelist[@]}"
 
     envsubst "$(printf '$%s ' "${whitelist[@]}")" \
-        < $SCRIPTS_DIR/install.sh.template | \
-            tee "$BUILD_DIR/install.sh"
-    echo
+        < $SCRIPTS_DIR/install.sh.template \
+            > "$BUILD_DIR/install.sh"
 
-    chmod -v +x "$BUILD_DIR/install.sh"
+    chmod "${default_opts[@]}" +x "$BUILD_DIR/install.sh"
+
+    # >>> Stage G: Print Build Completion info
+
+    echo "Build completed. Run 'cd build && sudo ./install.sh' to install." >&2
 }
 
 #-------------------------------------------------------------------------------
