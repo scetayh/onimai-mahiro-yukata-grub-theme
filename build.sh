@@ -7,8 +7,9 @@ IFS=$'\n\t'
 #-------------------------------------------------------------------------------
 # Macros
 #-------------------------------------------------------------------------------
-readonly SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
-readonly VERSION=0.3.1
+SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+readonly SCRIPT_NAME
+readonly VERSION=0.3.2
 
 readonly MAXCOL=80
 
@@ -24,6 +25,8 @@ readonly GRUB_CUSTOM_CONFIG="99_mahiro"
 
 readonly ONIMAI_PINK=#ee858c
 readonly ONIMAI_BLUE=#45bbff
+readonly ONIMAI_LIGHT_PINK=#ffd9dc
+readonly ONIMAI_LIGHT_BLUE=#d4efff
 readonly ONIMAI_BROWN=#926453
 readonly ONIMAI_YELLOW=#fff899
 readonly DARK_GRAY=#777777
@@ -111,11 +114,13 @@ EOF
 }
 
 gen_terminal_box() {
-    local border_outer_thickness=15
-    local border_inner_thickness=6
+    local border_outer_thickness=5
+    local border_inner_thickness=9
 
-    local border_outer_color="#FFB8C6"
-    local border_inner_color="#FFE796"
+    local border_outer_color="${ONIMAI_YELLOW}"
+    local border_inner_color="${ONIMAI_PINK}"
+    [[ $color_style = blue ]] && \
+        border_inner_color="${ONIMAI_BLUE}"
 
     local output_prefix="$BUILD_DIR/$THEME_DIR/terminal_box"
 
@@ -162,15 +167,42 @@ gen_terminal_box() {
         "$full_image"
 
     local default_opts=(+repage -alpha on -define png:format=png32)
-    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+0+0 "${default_opts[@]}" "${output_prefix}_nw.png"
-    convert "$full_image" -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+0 "${default_opts[@]}" "${output_prefix}_n.png"
-    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+0 "${default_opts[@]}" "${output_prefix}_ne.png"
-    convert "$full_image" -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+0+${fillet_radius} "${default_opts[@]}" "${output_prefix}_w.png"
-    convert "$full_image" -crop $((full_image_sidelen - 2*fillet_radius))x$((full_image_sidelen - 2*fillet_radius))+${fillet_radius}+${fillet_radius} "${default_opts[@]}" "${output_prefix}_c.png"
-    convert "$full_image" -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+$((full_image_sidelen - fillet_radius))+${fillet_radius} "${default_opts[@]}" "${output_prefix}_e.png"
-    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+0+$((full_image_sidelen - fillet_radius)) "${default_opts[@]}" "${output_prefix}_sw.png"
-    convert "$full_image" -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+$((full_image_sidelen - fillet_radius)) "${default_opts[@]}" "${output_prefix}_s.png"
-    convert "$full_image" -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+$((full_image_sidelen - fillet_radius)) "${default_opts[@]}" "${output_prefix}_se.png"
+    convert "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+0+0 \
+        "${default_opts[@]}" \
+        "${output_prefix}_nw.png"
+    convert "$full_image" \
+        -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+0 \
+        "${default_opts[@]}" \
+        "${output_prefix}_n.png"
+    convert "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+0 \
+        "${default_opts[@]}" \
+        "${output_prefix}_ne.png"
+    convert "$full_image" \
+        -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+0+${fillet_radius} \
+        "${default_opts[@]}" \
+        "${output_prefix}_w.png"
+    convert "$full_image" \
+        -crop $((full_image_sidelen - 2*fillet_radius))x$((full_image_sidelen - 2*fillet_radius))+${fillet_radius}+${fillet_radius} \
+        "${default_opts[@]}" \
+        "${output_prefix}_c.png"
+    convert "$full_image" \
+        -crop ${fillet_radius}x$((full_image_sidelen - 2*fillet_radius))+$((full_image_sidelen - fillet_radius))+${fillet_radius} \
+        "${default_opts[@]}" \
+        "${output_prefix}_e.png"
+    convert "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+0+$((full_image_sidelen - fillet_radius)) \
+        "${default_opts[@]}" \
+        "${output_prefix}_sw.png"
+    convert "$full_image" \
+        -crop $((full_image_sidelen - 2*fillet_radius))x${fillet_radius}+${fillet_radius}+$((full_image_sidelen - fillet_radius)) \
+        "${default_opts[@]}" \
+        "${output_prefix}_s.png"
+    convert "$full_image" \
+        -crop ${fillet_radius}x${fillet_radius}+$((full_image_sidelen - fillet_radius))+$((full_image_sidelen - fillet_radius)) \
+        "${default_opts[@]}" \
+        "${output_prefix}_se.png"
 }
 
 #-------------------------------------------------------------------------------
@@ -305,7 +337,7 @@ main() {
 
     icon_size=$(float_multiple_round 36 "$scale")
 
-    item_color_style=${params[c]:=pink}
+    color_style=${params[c]:=pink}
 
     item_w_width=$(float_multiple_round 24 "$scale")
 
@@ -337,7 +369,7 @@ main() {
     ITEM_ICON_SPACE=$(float_multiple_round 18 "$scale")
     ITEM_SPACING=$(float_multiple_round 16 "$scale")
     ITEM_COLOR=$ONIMAI_PINK
-    [[ $item_color_style = blue ]] && \
+    [[ $color_style = blue ]] && \
         ITEM_COLOR=$ONIMAI_BLUE
     ITEM_FONT="$font_larger"
     ITEM_PIXMAP_STYLE='item_*.png'
@@ -401,7 +433,7 @@ main() {
 
     TERMINAL_FONT="$font_smaller"
     TERMINAL_BOX='terminal_box_*.png'
-    TERMINAL_LEFT=$(float_multiple_round 32 "$scale")
+    TERMINAL_LEFT=$(float_multiple_round 36 "$scale")
     TERMINAL_WIDTH=48%
     TERMINAL_TOP=$(
         round "$(
@@ -409,13 +441,15 @@ main() {
                 <<< "($BRAND_TOP + $BRAND_HEIGHT + $BOOT_MENU_TOP) / 2"
         )"
     )
-    TERMINAL_HEIGHT=84%-$TERMINAL_TOP
+    TERMINAL_HEIGHT=88%-$TERMINAL_TOP
     TERMINAL_BORDER=0
 
     #   4. For customized config script
 
-    BACKGROUND_COLOR=$ONIMAI_YELLOW
-    COLOR_NORMAL=dark-gray/black
+    BACKGROUND_COLOR=$ONIMAI_LIGHT_PINK
+    [[ $color_style = blue ]] && \
+        BACKGROUND_COLOR=$ONIMAI_LIGHT_BLUE
+    COLOR_NORMAL=brown/black
 
     # >>> Stage F: Generate theme
 
@@ -461,19 +495,19 @@ main() {
 
     # west
     ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/item/$item_color_style/item_w_c.png" \
+        -i "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
         -vf "scale=$item_w_width:$ITEM_HEIGHT" \
         "$BUILD_DIR/$THEME_DIR/item_w.png"
 
     # central
     ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/item/$item_color_style/item_w_c.png" \
+        -i "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
         -vf "scale=1:$ITEM_HEIGHT" \
         "$BUILD_DIR/$THEME_DIR/item_c.png"
 
     # east
     ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/item/$item_color_style/item_e.png" \
+        -i "$ASSETS_DIR/images/item/$color_style/item_e.png" \
         -vf "scale=-1:$ITEM_HEIGHT" \
         "$BUILD_DIR/$THEME_DIR/item_e.png"
 
@@ -481,19 +515,19 @@ main() {
 
     # west
     ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/selected_item/$item_color_style/selected_item_w_c.png" \
+        -i "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
         -vf "scale=$item_w_width:$ITEM_HEIGHT" \
         "$BUILD_DIR/$THEME_DIR/selected_item_w.png"
     
     # central
     ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/selected_item/$item_color_style/selected_item_w_c.png" \
+        -i "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
         -vf "scale=1:$ITEM_HEIGHT" \
         "$BUILD_DIR/$THEME_DIR/selected_item_c.png"
 
     # east
     ffmpeg -loglevel trace \
-        -i "$ASSETS_DIR/images/selected_item/$item_color_style/selected_item_e.png" \
+        -i "$ASSETS_DIR/images/selected_item/$color_style/selected_item_e.png" \
         -vf "scale=-1:$ITEM_HEIGHT" \
         "$BUILD_DIR/$THEME_DIR/selected_item_e.png"
 
