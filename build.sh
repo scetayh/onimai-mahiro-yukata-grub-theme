@@ -503,66 +503,76 @@ main() {
 
     #   10. Generate theme config
 
-    export DESKTOP_IMAGE
-    export DESKTOP_IMAGE_SCALE_METHOD
+    whitelist=(
+        DESKTOP_IMAGE
+        DESKTOP_IMAGE_SCALE_METHOD
 
-    export TITLE_TEXT
+        TITLE_TEXT
 
-    export MESSAGE_FONT
+        MESSAGE_FONT
 
-    export BRAND_LEFT
-    export BRAND_WIDTH
-    export BRAND_TOP
-    export BRAND_HEIGHT
-    export BRAND_FILE
+        BRAND_LEFT
+        BRAND_WIDTH
+        BRAND_TOP
+        BRAND_HEIGHT
+        BRAND_FILE
 
-    export BOOT_MENU_LEFT
-    export BOOT_MENU_WIDTH
-    export BOOT_MENU_TOP
-    export BOOT_MENU_HEIGHT
+        BOOT_MENU_LEFT
+        BOOT_MENU_WIDTH
+        BOOT_MENU_TOP
+        BOOT_MENU_HEIGHT
 
-    export ICON_WIDTH
-    export ICON_HEIGHT
+        ICON_WIDTH
+        ICON_HEIGHT
 
-    export ITEM_HEIGHT
-    export ITEM_PADDING
-    export ITEM_ICON_SPACE
-    export ITEM_SPACING
-    export ITEM_COLOR
-    export ITEM_FONT
-    export ITEM_PIXMAP_STYLE
+        ITEM_HEIGHT
+        ITEM_PADDING
+        ITEM_ICON_SPACE
+        ITEM_SPACING
+        ITEM_COLOR
+        ITEM_FONT
+        ITEM_PIXMAP_STYLE
 
-    export SELECTED_ITEM_COLOR
-    export SELECTED_ITEM_FONT
-    export SELECTED_ITEM_PIXMAP_STYLE
+        SELECTED_ITEM_COLOR
+        SELECTED_ITEM_FONT
+        SELECTED_ITEM_PIXMAP_STYLE
 
-    export TIMEOUT_LEFT
-    export TIMEOUT_TOP
-    export TIMEOUT_ALIGN
-    export TIMEOUT_FONT
-    export TIMEOUT_TEXT
+        TIMEOUT_LEFT
+        TIMEOUT_TOP
+        TIMEOUT_ALIGN
+        TIMEOUT_FONT
+        TIMEOUT_TEXT
 
-    export TIMEOUT_COLOR
+        TIMEOUT_COLOR
 
-    export TERMINAL_FONT
-    export TERMINAL_BOX
-    export TERMINAL_LEFT
-    export TERMINAL_WIDTH
-    export TERMINAL_TOP
-    export TERMINAL_HEIGHT
-    export TERMINAL_BORDER
+        TERMINAL_FONT
+        TERMINAL_BOX
+        TERMINAL_LEFT
+        TERMINAL_WIDTH
+        TERMINAL_TOP
+        TERMINAL_HEIGHT
+        TERMINAL_BORDER
+    )
 
-    envsubst < $ASSETS_DIR/theme.txt.template | \
-        tee "$BUILD_DIR/$THEME_DIR/theme.txt"
+    export "${whitelist[@]}"
+
+    envsubst "$(printf '$%s ' "${whitelist[@]}")" \
+        < $ASSETS_DIR/theme.txt.template | \
+            tee "$BUILD_DIR/$THEME_DIR/theme.txt"
     echo
 
     #   11. Generate customized config script
 
-    export BACKGROUND_COLOR
-    export COLOR_NORMAL
+    whitelist=(
+        BACKGROUND_COLOR
+        COLOR_NORMAL
+    )
 
-    envsubst < $ASSETS_DIR/$GRUB_CUSTOM_CONFIG.template | \
-        tee "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
+    export "${whitelist[@]}"
+
+    envsubst "$(printf '$%s ' "${whitelist[@]}")" \
+        < $ASSETS_DIR/$GRUB_CUSTOM_CONFIG.template | \
+            tee "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
     echo
 
     chmod -v +x "$BUILD_DIR/$GRUB_CUSTOM_CONFIG"
