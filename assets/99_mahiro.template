@@ -1,4 +1,8 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-printf 'background_color "%s"\n' "${BACKGROUND_COLOR}"
-printf 'set color_normal="%s"\n' "${COLOR_NORMAL}"
+cat << EOF
+background_color "${BACKGROUND_COLOR}"
+set color_normal=${COLOR_NORMAL}
+set color_highlight=${COLOR_HIGHLIGHT}
+EOF

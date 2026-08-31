@@ -380,6 +380,7 @@ main() {
     [[ $color_style = blue ]] && \
         BACKGROUND_COLOR=$ONIMAI_LIGHT_BLUE
     COLOR_NORMAL=brown/black
+    COLOR_HIGHLIGHT=yellow/black
 
     # >>> Stage F: Generate theme
 
@@ -627,6 +628,7 @@ main() {
     whitelist=(
         BACKGROUND_COLOR
         COLOR_NORMAL
+        COLOR_HIGHLIGHT
     )
 
     export "${whitelist[@]}"
