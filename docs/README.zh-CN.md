@@ -4,7 +4,7 @@
   <a href="../README.md">English</a> | <b>简体中文</b>
 </p>
 
-![预览](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.jpg)
+![预览](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.gif)
 
 <p align="center">
   <small><i>前往<a href="#画廊">画廊</a>查看更多预览。</i></small>

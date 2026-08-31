@@ -4,7 +4,7 @@
   <b>English</b> | <a href="docs/README.zh-CN.md">简体中文</a>
 </p>
 
-![Preview](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.jpg)
+![Preview](https://blog.tarikkochan.top/onimai_mahiro_yukata_grub_theme_preview.gif)
 
 <p align="center">
   <small><i>Go to <a href="#galary">Galary</a> for more previews.</i></small>
