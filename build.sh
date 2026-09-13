@@ -9,7 +9,7 @@ IFS=$'\n\t'
 #-------------------------------------------------------------------------------
 SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 readonly SCRIPT_NAME
-readonly VERSION=0.3.3
+readonly VERSION=0.3.4
 
 readonly MAXCOL=80
 
@@ -428,19 +428,21 @@ main() {
 
     # west
     "${convert_cmd[@]}" "${convert_default_opts[@]}" \
-        "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
+        "$ASSETS_DIR/images/item_$color_style.png" \
+        -crop 1x+0+0 +repage \
         -resize "${item_w_width}x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/item_w.png"
 
     # central
     "${convert_cmd[@]}" "${convert_default_opts[@]}" \
-        "$ASSETS_DIR/images/item/$color_style/item_w_c.png" \
+        "$ASSETS_DIR/images/item_$color_style.png" \
+        -crop 1x+0+0 +repage \
         -resize "1x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/item_c.png"
 
     # east
     "${convert_cmd[@]}" "${convert_default_opts[@]}" \
-        "$ASSETS_DIR/images/item/$color_style/item_e.png" \
+        "$ASSETS_DIR/images/item_$color_style.png" \
         -resize "x${ITEM_HEIGHT}" \
         "$BUILD_DIR/$THEME_DIR/item_e.png"
 
@@ -448,19 +450,21 @@ main() {
 
     # west
     "${convert_cmd[@]}" "${convert_default_opts[@]}" \
-        "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
+        "$ASSETS_DIR/images/selected_item_$color_style.png" \
+        -crop 1x+0+0 +repage \
         -resize "${item_w_width}x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/selected_item_w.png"
 
     # central
     "${convert_cmd[@]}" "${convert_default_opts[@]}" \
-        "$ASSETS_DIR/images/selected_item/$color_style/selected_item_w_c.png" \
+        "$ASSETS_DIR/images/selected_item_$color_style.png" \
+        -crop 1x+0+0 +repage \
         -resize "1x${ITEM_HEIGHT}!" \
         "$BUILD_DIR/$THEME_DIR/selected_item_c.png"
 
     # east
     "${convert_cmd[@]}" "${convert_default_opts[@]}" \
-        "$ASSETS_DIR/images/selected_item/$color_style/selected_item_e.png" \
+        "$ASSETS_DIR/images/selected_item_$color_style.png" \
         -resize "x${ITEM_HEIGHT}" \
         "$BUILD_DIR/$THEME_DIR/selected_item_e.png"
 
