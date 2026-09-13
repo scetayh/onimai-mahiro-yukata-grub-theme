@@ -10,9 +10,6 @@ Files: assets/icons/*
 Copyright: Author Unknown (Retrieved from https://github.com/itrocaiks/OnimaiGRUB in 2026)
 License: UNKNOWN
 
-Files: assets/images/item/*
- . assets/images/selected_item/*
- . assets/images/background.png
- . assets/images/title.png
+Files: assets/images/*
 Copyright: ねことうふ・一迅社／「おにまい」製作委員会 (https://onimai.jp/)
 License: UNKNOWN
