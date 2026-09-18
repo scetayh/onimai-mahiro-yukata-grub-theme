@@ -9,7 +9,7 @@ IFS=$'\n\t'
 #-------------------------------------------------------------------------------
 SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 readonly SCRIPT_NAME
-readonly VERSION=0.3.4
+readonly VERSION=0.3.5
 
 readonly MAXCOL=80
 
