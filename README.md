@@ -12,7 +12,7 @@
 
 ## Introduction
 
-**Onimai Mahiro (Yukata) GRUB Theme** is a GRUB theme that imitates the style of the TV anime [*Onimai: I'm Now Your Sister!*](https://onimai.jp/) (Japanese: お兄ちゃんはおしまい！) and features Mahiro Oyama in a yukata with a candy apple.
+**Onimai Mahiro (Yukata) GRUB Theme** is a GRUB theme that imitates the style of the TV anime [*Onimai: I'm Now Your Sister!*](https://onimai.jp/) (Japanese: お兄ちゃんはおしまい！) and features Oyama Mahiro (緒山まひろ) in a yukata (浴衣) with a candy apple.
 
 This theme was inspired by [itrocaiks](https://github.com/itrocaiks/)' [OnimaiGRUB](https://github.com/itrocaiks/OnimaiGRUB) project.
 
